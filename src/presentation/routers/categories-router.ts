@@ -1,24 +1,24 @@
 import express from "express";
 import { Request, Response } from "express";
 import { ApiStatusEnum } from "../../data/APIs/enums/api-status-enum";
-import { GetAllCategory } from "../../domain/use-case/category/get-all-category";
-import { CategoryResponseModel } from "../../domain/models/category";
+import { GetAllCategories } from "../../domain/use-case/categories/get-all-categories";
+import { CategoriesResponseModel } from "../../domain/models/categories";
 import { buildPagination } from "../utils/build-pagination";
 import { Pagination } from "../../data/APIs/type/api-pagination";
 import { validateRequest } from "../middleware/validate-request";
 import Joi from "joi";
 import { ApiSimpleFilter } from "../../data/APIs/type/api-simple-filter";
 import { ApiSimpleSortEnum } from "../../data/APIs/enums/api-simple-sort-enum";
-// import { CreateCategory } from "../../domain/use-case/category/create-category";
-// import { UpdateCategory } from "../../domain/use-case/category/update-category";
-// import { DeleteCategory } from "../../domain/use-case/category/delete-category";
+// import { CreateCategories } from "../../domain/use-case/categories/create-categories";
+// import { UpdateCategories } from "../../domain/use-case/categories/update-categories";
+// import { DeleteCategories } from "../../domain/use-case/categories/delete-categories";
 
-const BASE_URL = "category";
-export class CategoryRouter {
+const BASE_URL = "categories";
+export class CategoriesRouter {
   private router = express.Router();
 
   constructor(
-    private getAllCategory: GetAllCategory // protected createCategory: CreateCategory, // protected updateCategory: UpdateCategory, // protected deleteCategory: DeleteCategory
+    private getAllCategories: GetAllCategories // protected createCategories: CreateCategories, // protected updateCategories: UpdateCategories, // protected deleteCategories: DeleteCategories
   ) {
     this.initializeRoutes();
   }
@@ -56,16 +56,16 @@ export class CategoryRouter {
         sort: req.query.sort as ApiSimpleSortEnum,
       };
 
-      const categories = await this.getAllCategory.execute(filter);
+      const categories = await this.getAllCategories.execute(filter);
 
       const totalPages = Math.ceil(categories.total / length);
 
       return res.build<{
-        category: CategoryResponseModel[];
+        categories: CategoriesResponseModel[];
         pagination: Pagination;
       }>(
         {
-          category: categories.items,
+          categories: categories.items,
           pagination: buildPagination(
             page,
             length,

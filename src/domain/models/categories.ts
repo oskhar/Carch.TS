@@ -1,7 +1,7 @@
-export interface CategoryRequestModel {
+export interface CategoriesRequestModel {
   name: string;
 }
-export interface CategoryResponseModel {
+export interface CategoriesResponseModel {
   id?: string;
   name: string;
   created_date?: string;

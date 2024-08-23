@@ -1,22 +1,22 @@
 import {
-  CategoryRequestModel,
-  CategoryResponseModel,
-} from "../../../domain/models/category";
+  CategoriesRequestModel,
+  CategoriesResponseModel,
+} from "../../../domain/models/categories";
 import {
   getSortOption,
   SortOption,
 } from "../../APIs/enums/api-simple-sort-enum";
 import { ApiSimpleFilter } from "../../APIs/type/api-simple-filter";
-import { CategoryDataSource } from "../../interfaces/data-sources/category-data-sources";
+import { CategoriesDataSource } from "../../interfaces/data-sources/categories-data-sources";
 import { SQLDatabaseWrapper } from "../../interfaces/database/sql-database-wrapper";
 
-const DB_TABLE = "category";
-export class PGCategoryDataSource implements CategoryDataSource {
+const DB_TABLE = "categories";
+export class PGCategoriesDataSource implements CategoriesDataSource {
   constructor(private db: SQLDatabaseWrapper) {}
 
   async getAll(
     filter: ApiSimpleFilter
-  ): Promise<{ items: CategoryResponseModel[]; total: number }> {
+  ): Promise<{ items: CategoriesResponseModel[]; total: number }> {
     const { page, length, search, sort } = filter;
 
     let query = `SELECT * FROM ${DB_TABLE}`;
@@ -58,28 +58,31 @@ export class PGCategoryDataSource implements CategoryDataSource {
     return { items, total };
   }
 
-  async create(category: CategoryRequestModel): Promise<void> {
+  async create(categories: CategoriesRequestModel): Promise<void> {
     await this.db.query(
       `
       INSERT INTO ${DB_TABLE} (name)
       VALUES ($1)
     `,
-      [category.name]
+      [categories.name]
     );
   }
 
-  async updateOne(id: string, category: CategoryRequestModel): Promise<void> {
+  async updateOne(
+    id: string,
+    categories: CategoriesRequestModel
+  ): Promise<void> {
     await this.db.query(
       `
       UPDATE ${DB_TABLE}
         SET name = $1, updated_date = NOW()
       WHERE id = $2
     `,
-      [category.name, id]
+      [categories.name, id]
     );
   }
 
-  async getOne(id: string): Promise<CategoryResponseModel | null> {
+  async getOne(id: string): Promise<CategoriesResponseModel | null> {
     const result = await this.db.query(
       `SELECT * FROM ${DB_TABLE} WHERE id = $1`,
       [id]

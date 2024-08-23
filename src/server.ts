@@ -1,9 +1,9 @@
 import express from "express";
 import { SQLDatabaseWrapper } from "./data/interfaces/database/sql-database-wrapper";
-import { CategoryRouter } from "./presentation/routers/category-router";
-import { GetAllCategory } from "./domain/use-case/category/get-all-category";
-import { CategoryRepositoryImpl } from "./domain/repositories/category-repository";
-import { PGCategoryDataSource } from "./data/data-sources/pg/pg-category-data-source";
+import { CategoriesRouter } from "./presentation/routers/categories-router";
+import { GetAllCategories } from "./domain/use-case/categories/get-all-categories";
+import { CategoriesRepositoryImpl } from "./domain/repositories/categories-repository";
+import { PGCategoriesDataSource } from "./data/data-sources/pg/pg-category-data-source";
 import { buildResponseMiddleware } from "./presentation/middleware/build-response-middleware";
 import { requestIdMiddleware } from "./presentation/middleware/request-id-middleware";
 
@@ -16,8 +16,10 @@ export async function startServer(db: SQLDatabaseWrapper) {
   server.use(requestIdMiddleware);
 
   // Router
-  const categoryRouter = new CategoryRouter(
-    new GetAllCategory(new CategoryRepositoryImpl(new PGCategoryDataSource(db)))
+  const categoryRouter = new CategoriesRouter(
+    new GetAllCategories(
+      new CategoriesRepositoryImpl(new PGCategoriesDataSource(db))
+    )
   );
   server.use(categoryRouter.getRouter());
 

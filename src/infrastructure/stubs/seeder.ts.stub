@@ -1,0 +1,21 @@
+import { faker } from "@faker-js/faker";
+import { PoolClient } from "pg";
+
+export async function {SeederName}Seeder(client: PoolClient) {
+  const {SeederName} = [];
+  const length = 10;
+
+  for (let i = 0; i < length; i++) {
+    {SeederName}.push({
+      name: faker.name.firstName(),
+    });
+  }
+
+  for (const item of {SeederName}) {
+    await client.query("INSERT INTO {SeederName} (name) VALUES ($1)", [
+      item.name,
+    ]);
+  }
+
+  console.log("{SeederName} seeded");
+}
