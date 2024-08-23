@@ -1,0 +1,13 @@
+.env
+.env.server
+.env.production
+node_modules
+dist
+testing.sql
+experiment.sql
+.env.production
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
