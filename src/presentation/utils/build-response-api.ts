@@ -14,29 +14,36 @@ export class BuildResponseApi {
   execute<T>(
     data?: T,
     status: ApiStatusEnum = ApiStatusEnum.SUCCESS,
-    errors?: string[]
+    errors?: string[],
+    message?: string
   ): Response<ApiResponse<T> | ApiResponseError> {
     const meta: ApiMeta = {
       request_id: this.req.header("X-Request-ID") || generateUUIDv4(),
       response_size: "0 Byte",
     };
 
-    let response: ApiResponse<T> | ApiResponseError;
+    let response: any;
 
     if (errors && errors.length > 0) {
       response = {
         status: false,
-        message: ApiStatusMessages[status],
+        message: message || ApiStatusMessages[status],
         errors,
         meta,
-      };
-    } else {
+      } as ApiResponseError;
+    } else if (data !== undefined) {
       response = {
         status: true,
-        message: ApiStatusMessages[status],
+        message: message || ApiStatusMessages[status],
         data,
         meta,
       } as ApiResponse<T>;
+    } else {
+      response = {
+        status: true,
+        message: message || ApiStatusMessages[status],
+        meta,
+      };
     }
 
     response.meta.response_size =

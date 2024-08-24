@@ -4,7 +4,7 @@ import {
   CategoriesResponseModel,
 } from "../../models/categories";
 
-export interface CategoriesRepository {
+export interface CategoriesUseCase {
   getCategories(
     filter: ApiSimpleFilter
   ): Promise<{ items: CategoriesResponseModel[]; total: number }>;

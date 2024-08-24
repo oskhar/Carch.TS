@@ -9,7 +9,7 @@ import { validateRequest } from "../middleware/validate-request";
 import Joi from "joi";
 import { ApiSimpleFilter } from "../../data/APIs/type/api-simple-filter";
 import { ApiSimpleSortEnum } from "../../data/APIs/enums/api-simple-sort-enum";
-// import { CreateCategories } from "../../domain/use-case/categories/create-categories";
+import { CreateOneCategories } from "../../domain/use-case/categories/create-one-categories";
 // import { UpdateCategories } from "../../domain/use-case/categories/update-categories";
 // import { DeleteCategories } from "../../domain/use-case/categories/delete-categories";
 
@@ -18,7 +18,8 @@ export class CategoriesRouter {
   private router = express.Router();
 
   constructor(
-    private getAllCategories: GetAllCategories // protected createCategories: CreateCategories, // protected updateCategories: UpdateCategories, // protected deleteCategories: DeleteCategories
+    protected getAllCategories: GetAllCategories,
+    protected createOneCategories: CreateOneCategories // protected updateCategories: UpdateCategories, // protected deleteCategories: DeleteCategories
   ) {
     this.initializeRoutes();
   }
@@ -63,18 +64,16 @@ export class CategoriesRouter {
       return res.build<{
         categories: CategoriesResponseModel[];
         pagination: Pagination;
-      }>(
-        {
-          categories: categories.items,
-          pagination: buildPagination(
-            page,
-            length,
-            categories.total,
-            totalPages
-          ),
-        },
-        ApiStatusEnum.SUCCESS
-      );
+      }>({
+        categories: categories.items,
+        pagination: buildPagination(
+          page,
+          length,
+          categories.total,
+          totalPages,
+          filter.search
+        ),
+      });
     } catch (errors) {
       return res.build(
         [`get ${BASE_URL} error`, errors.message],
@@ -85,7 +84,8 @@ export class CategoriesRouter {
 
   private async createController(req: Request, res: Response) {
     try {
-      throw new Error("Router not implemented.");
+      this.createOneCategories.execute({ name: req.body.name });
+      return res.build();
     } catch (errors) {
       return res.build(
         [`post ${BASE_URL} error`, errors.message],
@@ -107,7 +107,7 @@ export class CategoriesRouter {
 
   private async deleteController(req: Request, res: Response) {
     try {
-      throw new Error("Router not implemented.");
+      return res.build();
     } catch (errors) {
       return res.build(
         [`delete ${BASE_URL} error`, errors.message],

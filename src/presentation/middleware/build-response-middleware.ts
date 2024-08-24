@@ -7,16 +7,22 @@ export function buildResponseMiddleware(
   res: Response,
   next: NextFunction
 ) {
-  res.build = <T>(
-    payload: T | string[],
-    status: number = ApiStatusEnum.SUCCESS
-  ) => {
+  res.build = <T>(payload?: T, status: number = ApiStatusEnum.SUCCESS) => {
     const buildResponseApi = new BuildResponseApi(req, res);
 
-    if (Array.isArray(payload))
-      return buildResponseApi.execute(undefined, status, payload);
+    if (typeof payload === "string") {
+      return buildResponseApi.execute(undefined, status, undefined, payload);
+    }
 
-    return buildResponseApi.execute(payload, status, undefined);
+    if (Array.isArray(payload)) {
+      return buildResponseApi.execute(undefined, status, payload);
+    }
+
+    return buildResponseApi.execute(
+      payload !== null ? payload : undefined,
+      status,
+      undefined
+    );
   };
   next();
 }
@@ -24,7 +30,7 @@ export function buildResponseMiddleware(
 declare global {
   namespace Express {
     interface Response {
-      build: <T>(payload: T | string[], status?: number) => Response;
+      build: <T>(payload?: T, status?: number) => Response;
     }
   }
 }

@@ -50,8 +50,8 @@ export class PGCategoriesDataSource implements CategoriesDataSource {
     const items = dbResponse.rows.map((item) => ({
       id: item.id,
       name: item.name,
-      created_date: item.created_date,
-      updated_date: item.updated_date,
+      created_at: item.created_at,
+      updated_at: item.updated_at,
     }));
     const total = parseInt(totalResponse.rows[0].count, 10);
 
@@ -75,7 +75,7 @@ export class PGCategoriesDataSource implements CategoriesDataSource {
     await this.db.query(
       `
       UPDATE ${DB_TABLE}
-        SET name = $1, updated_date = NOW()
+        SET name = $1, updated_at = NOW()
       WHERE id = $2
     `,
       [categories.name, id]
@@ -90,8 +90,8 @@ export class PGCategoriesDataSource implements CategoriesDataSource {
     if (result.rows.length === 0) {
       return null;
     }
-    const { name, created_date, updated_date } = result.rows[0];
-    return { id, name, created_date, updated_date };
+    const { name, created_at, updated_at } = result.rows[0];
+    return { id, name, created_at, updated_at };
   }
 
   async deleteOne(id: string): Promise<void> {

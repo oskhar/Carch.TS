@@ -17,9 +17,9 @@ export function getSortOption(sort: ApiSimpleSortEnum): SortOption {
     case ApiSimpleSortEnum.ZA:
       return { column: "name", direction: "DESC" };
     case ApiSimpleSortEnum.LATEST:
-      return { column: "created_date", direction: "DESC" };
+      return { column: "created_at", direction: "DESC" };
     case ApiSimpleSortEnum.OLDEST:
-      return { column: "created_date", direction: "ASC" };
+      return { column: "created_at", direction: "ASC" };
     default:
       throw new Error(`Unsupported sort type: ${sort}`);
   }

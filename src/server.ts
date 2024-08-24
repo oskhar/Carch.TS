@@ -6,6 +6,7 @@ import { CategoriesRepositoryImpl } from "./domain/repositories/categories-repos
 import { PGCategoriesDataSource } from "./data/data-sources/pg/pg-category-data-source";
 import { buildResponseMiddleware } from "./presentation/middleware/build-response-middleware";
 import { requestIdMiddleware } from "./presentation/middleware/request-id-middleware";
+import { CreateOneCategories } from "./domain/use-case/categories/create-one-categories";
 
 export async function startServer(db: SQLDatabaseWrapper) {
   const server = express();
@@ -16,10 +17,12 @@ export async function startServer(db: SQLDatabaseWrapper) {
   server.use(requestIdMiddleware);
 
   // Router
+  const categoriesDepedencies = new CategoriesRepositoryImpl(
+    new PGCategoriesDataSource(db)
+  );
   const categoryRouter = new CategoriesRouter(
-    new GetAllCategories(
-      new CategoriesRepositoryImpl(new PGCategoriesDataSource(db))
-    )
+    new GetAllCategories(categoriesDepedencies),
+    new CreateOneCategories(categoriesDepedencies)
   );
   server.use(categoryRouter.getRouter());
 

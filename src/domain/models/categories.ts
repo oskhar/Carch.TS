@@ -4,6 +4,6 @@ export interface CategoriesRequestModel {
 export interface CategoriesResponseModel {
   id?: string;
   name: string;
-  created_date?: string;
-  updated_date?: string;
+  created_at?: string;
+  updated_at?: string;
 }

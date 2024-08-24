@@ -7,19 +7,23 @@ export function buildPagination(
   currentPage: number,
   perPage: number,
   totalItems: number,
-  totalPages: number
+  totalPages: number,
+  currentSearch?: string
 ): Pagination {
+  const buildQueryString = (page: number) => {
+    let queryString = `?page=${page}&length=${perPage}`;
+    if (currentSearch) {
+      queryString += `&search=${encodeURIComponent(currentSearch)}`;
+    }
+    return queryString;
+  };
+
   const links: LinkPagination = {
-    first: `?page=1&per_page=${perPage}`,
-    last: `?page=${totalPages}&per_page=${perPage}`,
+    first: buildQueryString(1),
+    last: buildQueryString(totalPages),
     next:
-      currentPage < totalPages
-        ? `?page=${currentPage + 1}&per_page=${perPage}`
-        : undefined,
-    prev:
-      currentPage > 1
-        ? `?page=${currentPage - 1}&per_page=${perPage}`
-        : undefined,
+      currentPage < totalPages ? buildQueryString(currentPage + 1) : undefined,
+    prev: currentPage > 1 ? buildQueryString(currentPage - 1) : undefined,
   };
 
   return {

@@ -21,10 +21,10 @@ export class CategoriesRepositoryImpl implements CategoriesRepository {
   }
 
   deleteOne(id: string): void {
-    throw new Error("Method not implemented.");
+    this.categoriesDataSource.deleteOne(id);
   }
 
-  getCategory(id: string): Promise<CategoriesResponseModel> {
+  getOne(id: string): Promise<CategoriesResponseModel> {
     throw new Error("Method not implemented.");
   }
 

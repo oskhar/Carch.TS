@@ -4,12 +4,12 @@ import { GetAllCategoriesUseCase } from "../../interfaces/use-case/categories/ge
 import { CategoriesResponseModel } from "../../models/categories";
 
 export class GetAllCategories implements GetAllCategoriesUseCase {
-  constructor(protected categoryRepository: CategoriesRepository) {}
+  constructor(protected categoriesRepository: CategoriesRepository) {}
 
   async execute(
     filter: ApiSimpleFilter
   ): Promise<{ items: CategoriesResponseModel[]; total: number }> {
-    const result = await this.categoryRepository.getCategories(filter);
+    const result = await this.categoriesRepository.getCategories(filter);
     return result;
   }
 }
