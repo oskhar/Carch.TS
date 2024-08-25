@@ -22,6 +22,14 @@ program
       fs.mkdirSync(targetDir, { recursive: true });
     }
 
+    // Cek apakah file sudah ada
+    if (fs.existsSync(targetFile)) {
+      console.error(
+        `Error: Seeder ${seederName} already exists at ${targetFile}`
+      );
+      process.exit(1);
+    }
+
     fs.readFile(stubFile, "utf8", (err, data) => {
       if (err) {
         console.error("Error reading stub file:", err);

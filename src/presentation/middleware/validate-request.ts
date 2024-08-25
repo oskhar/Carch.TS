@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Schema } from "joi";
-import { ApiStatusEnum } from "../../data/APIs/enums/api-status-enum";
+import { ApiStatusEnum } from "../../data/enums/api-status-enum";
 import { InvalidRequest } from "../../errors/exceptions/invalid-request";
 
 export function validateRequest(schema: Schema) {

@@ -6,51 +6,47 @@ import { asyncHandler } from "../middleware/async-hendler";
 import { CategoriesController } from "../controllers/categories-controller";
 
 export function CategoriesRouter(categoriesUseCase: CategoriesUseCase) {
-  const BASE_URL = "categories";
+  /**
+   * router configure
+   */
+  const baseUrl = "categories";
   const router = express.Router();
   const controller = new CategoriesController(categoriesUseCase);
 
   /**
-   * define endpoint GET `categories`
+   * validation schema
    */
-  router.get(
-    `/${BASE_URL}/`,
-    validateRequest(
-      Joi.object({
-        page: Joi.number().integer().min(1).default(1).optional(),
-        length: Joi.number().integer().min(1).default(10).optional(),
-        search: Joi.string().optional().allow(""),
-        sort: Joi.string()
-          .valid("latest", "oldest", "a-z", "z-a")
-          .default("latest")
-          .optional(),
-      })
-    ),
-    asyncHandler(controller.getAll)
-  );
+  const getPaginationSchema = Joi.object({
+    page: Joi.number().integer().min(1).default(1).optional(),
+    length: Joi.number().integer().min(1).default(10).optional(),
+    search: Joi.string().optional().allow(""),
+    sort: Joi.string()
+      .valid("latest", "oldest", "a-z", "z-a")
+      .default("latest")
+      .optional(),
+  });
+  const createUpdateSchema = Joi.object({
+    name: Joi.string().min(2).required(),
+  });
 
   /**
-   * define endpoint POST `categories`
+   * define router GET & POST categories
    */
-  router.post(
-    `/${BASE_URL}/`,
-    validateRequest(
-      Joi.object({
-        name: Joi.string().min(2).required(),
-      })
-    ),
-    asyncHandler(controller.create)
-  );
+  router
+    .route(`/${baseUrl}/`)
+    .get(validateRequest(getPaginationSchema), asyncHandler(controller.getAll))
+    .post(validateRequest(createUpdateSchema), asyncHandler(controller.create));
 
   /**
-   * define endpoint PUT `categories/{id}`
+   * define router PUT & DELETE categories with param
    */
-  router.put(`/${BASE_URL}/:id`, asyncHandler(controller.update));
+  router
+    .route(`/${baseUrl}/:id`)
+    .put(validateRequest(createUpdateSchema), asyncHandler(controller.update))
+    .delete(asyncHandler(controller.delete));
 
   /**
-   * define endpoint DELETE `categories/{id}`
+   * bouncing defined router
    */
-  router.delete(`/${BASE_URL}/:id`, asyncHandler(controller.delete));
-
   return router;
 }

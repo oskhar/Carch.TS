@@ -1,0 +1,57 @@
+import { Request, Response } from "express";
+import { {ControllerClass}ResponseModel } from "../../domain/models/{ControllerName}";
+import { buildPagination } from "../../utils/build-pagination";
+import { Pagination } from "../../data/APIs/type/api-pagination";
+import { ApiSimpleFilter } from "../../data/APIs/type/api-simple-filter";
+import { ApiSimpleSortEnum } from "../../data/APIs/enums/api-simple-sort-enum";
+import { {ControllerClass}UseCase } from "../../domain/interfaces/use-case/{ControllerName}-use-case";
+import { ApiStatusEnum } from "../../data/APIs/enums/api-status-enum";
+import { validateRequest } from "../middleware/validate-request";
+import Joi from "joi";
+import { RouterNotImplemented } from "../../errors/exceptions/router-nor-implemented";
+
+export class {ControllerClass}Controller {
+  constructor(private {ControllerName}UseCase: {ControllerClass}UseCase) {}
+
+  public getAll = async (req: Request, res: Response) => {
+    throw new RouterNotImplemented("{ControllerName} getAll not implemented.");
+
+    const page = parseInt(req.query.page as string);
+    const length = parseInt(req.query.length as string);
+    const filter: ApiSimpleFilter = {
+      page,
+      length,
+      search: req.query.search as string,
+      sort: req.query.sort as ApiSimpleSortEnum,
+    };
+
+    const {ControllerName} = await this.{ControllerName}UseCase.get{ControllerClass}(filter);
+    const totalPages = Math.ceil({ControllerName}.total / length);
+
+    res.build<{
+      {ControllerName}: {ControllerClass}ResponseModel[];
+      pagination: Pagination;
+    }>({
+      {ControllerName}: null,
+      pagination: null
+    });
+  };
+
+  public create = async (req: Request, res: Response) => {
+    throw new RouterNotImplemented("{ControllerName} create not implemented.");
+
+    res.build(ApiStatusEnum.CREATED)
+  };
+
+  public update = async (req: Request, res: Response) => {
+    throw new RouterNotImplemented("{ControllerName} update not implemented.");
+
+    res.build()
+  };
+
+  public delete = async (req: Request, res: Response) => {
+    throw new RouterNotImplemented("{ControllerName} delete not implemented.");
+    
+    res.build(ApiStatusEnum.NO_CONTENT)
+  };
+}

@@ -1,4 +1,4 @@
-import { ApiSimpleFilter } from "../../data/APIs/type/api-simple-filter";
+import { ApiSimpleFilter } from "../../data/type/api-simple-filter";
 import { ConflictUniqueData } from "../../errors/exceptions/conflict-unique-data";
 import { DataNotFound } from "../../errors/exceptions/data-not-found";
 import { CategoriesRepository } from "../interfaces/repositories/categories-repository";

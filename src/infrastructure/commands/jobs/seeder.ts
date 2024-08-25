@@ -1,7 +1,7 @@
 import { Command } from "commander";
 import dotenv from "dotenv";
 import { Pool } from "pg";
-import { seeders } from "../database/pg/seeder/database-seeder";
+import { seeders } from "../../database/pg/seeder/database-seeder";
 
 dotenv.config();
 

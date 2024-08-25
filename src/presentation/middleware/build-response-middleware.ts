@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { BuildResponseApi } from "../../utils/build-response-api";
-import { ApiStatusEnum } from "../../data/APIs/enums/api-status-enum";
+import { ApiStatusEnum } from "../../data/enums/api-status-enum";
 
 export function buildResponseMiddleware(
   req: Request,

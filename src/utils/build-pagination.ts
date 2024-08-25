@@ -1,39 +1,42 @@
-import { LinkPagination, Pagination } from "../data/APIs/type/api-pagination";
+import {
+  LinkPagination,
+  Pagination,
+  PaginationParams,
+} from "../data/type/api-pagination";
 import { DataNotFound } from "../errors/exceptions/data-not-found";
 
-export function buildPagination(
-  currentPage: number,
-  perPage: number,
-  totalItems: number,
-  totalPages: number,
-  currentSearch?: string
-): Pagination {
-  if (currentPage > totalPages && totalPages > 0)
+export function buildPagination(params: PaginationParams): Pagination {
+  if (params.currentPage > params.totalPages && params.totalPages > 0)
     throw new DataNotFound(
       "You have exceeded the maximum page limit. Please check the available pages and try again."
     );
 
   const buildQueryString = (page: number) => {
-    let queryString = `?page=${page}&length=${perPage}`;
-    if (currentSearch) {
-      queryString += `&search=${encodeURIComponent(currentSearch)}`;
+    let queryString = `?page=${page}&length=${params.perPage}`;
+    if (params.currentSearch) {
+      queryString += `&search=${encodeURIComponent(params.currentSearch)}`;
     }
     return queryString;
   };
 
   const links: LinkPagination = {
     first: buildQueryString(1),
-    last: buildQueryString(totalPages),
+    last: buildQueryString(params.totalPages),
     next:
-      currentPage < totalPages ? buildQueryString(currentPage + 1) : undefined,
-    prev: currentPage > 1 ? buildQueryString(currentPage - 1) : undefined,
+      params.currentPage < params.totalPages
+        ? buildQueryString(params.currentPage + 1)
+        : undefined,
+    prev:
+      params.currentPage > 1
+        ? buildQueryString(params.currentPage - 1)
+        : undefined,
   };
 
   return {
-    total: totalItems,
-    per_page: perPage,
-    current_page: currentPage,
-    total_page: totalPages,
+    total: params.totalItems,
+    per_page: params.perPage,
+    current_page: params.currentPage,
+    total_page: params.totalPages,
     links,
   };
 }

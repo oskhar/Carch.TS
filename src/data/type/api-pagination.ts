@@ -17,3 +17,11 @@ export type ApiPagination<T> = {
   data: T;
   pagination: Pagination;
 };
+
+export type PaginationParams = {
+  currentPage: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+  currentSearch?: string;
+};

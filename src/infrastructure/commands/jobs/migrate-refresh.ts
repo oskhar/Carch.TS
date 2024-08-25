@@ -7,7 +7,7 @@ import { Pool, PoolClient } from "pg";
 dotenv.config();
 
 const program = new Command();
-const migrationsDir = path.resolve(__dirname, "../database/pg/migrations");
+const migrationsDir = path.resolve(__dirname, "../../database/pg/migrations");
 const pool = new Pool({
   host: process.env.DB_HOST || "localhost",
   port: parseInt(process.env.DB_PORT as string) || 5432,

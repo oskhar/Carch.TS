@@ -1,4 +1,4 @@
-import { ApiStatusEnum } from "../../data/APIs/enums/api-status-enum";
+import { ApiStatusEnum } from "../../data/enums/api-status-enum";
 
 export class ConflictUniqueData extends Error {
   readonly statusCode = ApiStatusEnum.CONFLICT;

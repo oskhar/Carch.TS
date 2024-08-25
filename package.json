@@ -4,13 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch 'src/**/*.ts' --exec './node_modules/.bin/ts-node' src/main.ts",
-    "make:router": "node src/infrastructure/commands/generators/make-router.js",
-    "make:migration": "node src/infrastructure/commands/generators/make-pg-migration.js",
-    "make:seeder": "node src/infrastructure/commands/generators/make-pg-seeder.js",
-    "migrate": "ts-node src/infrastructure/commands/migrate.ts",
-    "migrate:rollback": "ts-node src/infrastructure/commands/migrate-rollback.ts",
-    "migrate:refresh": "ts-node src/infrastructure/commands/migrate-refresh.ts",
-    "seeder": "ts-node src/infrastructure/commands/seeder.ts"
+    "infras": "node src/infrastructure/commands/bundle.js"
   },
   "keywords": [],
   "author": "",

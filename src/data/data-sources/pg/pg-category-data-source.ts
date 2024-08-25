@@ -4,11 +4,8 @@ import {
 } from "../../../domain/models/categories";
 import { ForbiddenException } from "../../../errors/exceptions/forbidden-exception";
 import { isNumeric } from "../../../utils/string-checker";
-import {
-  getSortOption,
-  SortOption,
-} from "../../APIs/enums/api-simple-sort-enum";
-import { ApiSimpleFilter } from "../../APIs/type/api-simple-filter";
+import { getSortOption, SortOption } from "../../enums/api-simple-sort-enum";
+import { ApiSimpleFilter } from "../../type/api-simple-filter";
 import { CategoriesDataSource } from "../../interfaces/data-sources/categories-data-sources";
 import { SQLDatabaseWrapper } from "../../interfaces/database/sql-database-wrapper";
 
@@ -38,7 +35,7 @@ export class PGCategoriesDataSource implements CategoriesDataSource {
   async getAll(
     filter: ApiSimpleFilter
   ): Promise<{ items: CategoriesResponseModel[]; total: number }> {
-    const { page, length, search, sort } = filter;
+    const { page, perPage, search, sort } = filter;
 
     let query = `SELECT * FROM ${this.db_table}`;
     let countQuery = `SELECT COUNT(*) FROM ${this.db_table}`;
@@ -59,7 +56,7 @@ export class PGCategoriesDataSource implements CategoriesDataSource {
     query += ` ORDER BY ${sortOption.column} ${sortOption.direction}`;
     query += ` LIMIT $${values.length + 1} OFFSET $${values.length + 2}`;
 
-    values.push(`${length}`, `${(page - 1) * length}`);
+    values.push(`${perPage}`, `${(page - 1) * perPage}`);
 
     const dbResponse = await this.db.query(query, values);
 

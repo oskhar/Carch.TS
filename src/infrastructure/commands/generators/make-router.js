@@ -24,6 +24,11 @@ program
       fs.mkdirSync(targetDir, { recursive: true });
     }
 
+    if (fs.existsSync(targetFile)) {
+      console.error(`Error: Router ${name} already exists at ${targetFile}`);
+      process.exit(1);
+    }
+
     fs.readFile(stubFile, "utf8", (err, data) => {
       if (err) {
         console.error("Error reading stub file:", err);

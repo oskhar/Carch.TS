@@ -12,4 +12,5 @@ yarn-error.log
 /.idea
 /.vscode
 experiment-migration.tsbak
-/logs
+logs
+tmp-architecture-schema

@@ -1,4 +1,4 @@
-import { ApiStatusEnum } from "../../data/APIs/enums/api-status-enum";
+import { ApiStatusEnum } from "../../data/enums/api-status-enum";
 
 export class InvalidRequest extends Error {
   readonly statusCode = ApiStatusEnum.BAD_REQUEST;

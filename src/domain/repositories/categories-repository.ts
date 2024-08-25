@@ -1,4 +1,4 @@
-import { ApiSimpleFilter } from "../../data/APIs/type/api-simple-filter";
+import { ApiSimpleFilter } from "../../data/type/api-simple-filter";
 import { CategoriesDataSource } from "../../data/interfaces/data-sources/categories-data-sources";
 import { handleQueryException } from "../../errors/handler/handle-query-exception";
 import { CategoriesRepository } from "../interfaces/repositories/categories-repository";

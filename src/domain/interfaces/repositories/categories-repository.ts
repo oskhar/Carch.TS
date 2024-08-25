@@ -1,4 +1,4 @@
-import { ApiSimpleFilter } from "../../../data/APIs/type/api-simple-filter";
+import { ApiSimpleFilter } from "../../../data/type/api-simple-filter";
 import {
   CategoriesRequestModel,
   CategoriesResponseModel,

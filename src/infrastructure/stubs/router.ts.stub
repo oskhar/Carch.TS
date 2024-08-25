@@ -6,57 +6,47 @@ import { asyncHandler } from "../middleware/async-hendler";
 import { {RouterClass}Controller } from "../controllers/{RouterName}-controller";
 
 export function {RouterClass}Router({RouterName}UseCase: {RouterClass}UseCase) {
+  /**
+   * router configure
+   */
   const BASE_URL = "{RouterName}";
   const router = express.Router();
   const controller = new {RouterClass}Controller({RouterName}UseCase);
 
   /**
-   * define endpoint GET `{RouterName}`
+   * validation schema
    */
-  router.get(
-    `/${BASE_URL}/`,
-    validateRequest(
-      Joi.object({
-        // Request validate rule
-      })
-    ),
-    asyncHandler(controller.getAll)
-  );
+  const getPaginationSchema = Joi.object({
+    page: Joi.number().integer().min(1).default(1).optional(),
+    length: Joi.number().integer().min(1).default(10).optional(),
+    search: Joi.string().optional().allow(""),
+    sort: Joi.string()
+      .valid("latest", "oldest", "a-z", "z-a")
+      .default("latest")
+      .optional(),
+  });
+  const createUpdateSchema = Joi.object({
+    // validate request data
+  });
 
   /**
-   * define endpoint POST `{RouterName}`
+   * define router GET & POST {RouterName}
    */
-  router.post(
-    `/${BASE_URL}/`,
-    validateRequest(
-      Joi.object({
-        // Request validate rule
-      })
-    ),
-    asyncHandler(controller.create)
-  );
+  router
+    .route(`${BASE_URL}/`)
+    .get(validateRequest(getPaginationSchema), asyncHandler(controller.getAll))
+    .post(validateRequest(createUpdateSchema), asyncHandler(controller.create));
 
   /**
-   * define endpoint PUT `{RouterName}/{id}`
+   * define router PUT & DELETE {RouterName} with param
    */
-  router.put(`/${BASE_URL}/:id`,
-    validateRequest(
-      Joi.object({
-        // Request validate rule
-      })
-    ),
-    asyncHandler(controller.update));
+  router
+    .route(`/${BASE_URL}/:id`)
+    .put(validateRequest(createUpdateSchema), asyncHandler(controller.update))
+    .delete(asyncHandler(controller.delete));
 
   /**
-   * define endpoint DELETE `{RouterName}/{id}`
+   * bouncing defined router
    */
-  router.delete(`/${BASE_URL}/:id`,
-    validateRequest(
-      Joi.object({
-        // Request validate rule
-      })
-    ),
-    asyncHandler(controller.delete));
-
   return router;
 }
