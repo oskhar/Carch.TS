@@ -5,7 +5,7 @@ export default class CategoriesMigration extends Migration {
   public async up(): Promise<void> {
     await this.schema.create("categories", (table: Blueprint) => {
       table.id();
-      table.string("name");
+      table.string("name").unique();
       table.timestamps();
     });
   }

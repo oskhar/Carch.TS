@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import {
   ApiStatusEnum,
   ApiStatusMessages,
-} from "../../data/APIs/enums/api-status-enum";
-import { ApiResponse } from "../../data/APIs/type/api-response";
-import { ApiMeta } from "../../data/APIs/type/api-meta";
-import { ApiResponseError } from "../../data/APIs/type/api-response-error";
+} from "../data/APIs/enums/api-status-enum";
+import { ApiResponse } from "../data/APIs/type/api-response";
+import { ApiMeta } from "../data/APIs/type/api-meta";
+import { ApiResponseError } from "../data/APIs/type/api-response-error";
 import { generateUUIDv4 } from "./generate-uuid-v4";
 
 export class BuildResponseApi {
@@ -18,7 +18,8 @@ export class BuildResponseApi {
     message?: string
   ): Response<ApiResponse<T> | ApiResponseError> {
     const meta: ApiMeta = {
-      request_id: this.req.header("X-Request-ID") || generateUUIDv4(),
+      request_id:
+        (this.req.headers["X-Request-ID"] as string) || generateUUIDv4(),
       response_size: "0 Byte",
     };
 

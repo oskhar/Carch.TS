@@ -6,19 +6,17 @@ const program = new Command();
 
 program
   .arguments("<name>")
-  .description("Generate a new model")
+  .description("Generate a new seeder")
   .action((name) => {
     if (!name) {
       console.error("Error: Name argument is required");
       process.exit(1);
     }
 
-    name = name.toLowerCase();
-
-    const modelClass = `${name.charAt(0).toUpperCase()}${name.slice(1)}`;
-    const targetDir = path.join(__dirname, "../../domain", "models");
-    const targetFile = path.join(targetDir, `${name}.ts`);
-    const stubFile = path.join(__dirname, "../stubs", "model.ts.stub");
+    const seederName = name.charAt(0).toUpperCase() + name.slice(1);
+    const targetDir = path.join(__dirname, "../../database/pg/seeder");
+    const targetFile = path.join(targetDir, `${name}-seeder.ts`);
+    const stubFile = path.join(__dirname, "../../stubs", "seeder.ts.stub");
 
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir, { recursive: true });
@@ -30,15 +28,17 @@ program
         return;
       }
 
-      const fileContent = data.replace(/{ModelClass}/g, modelClass);
+      const fileContent = data.replace(/{SeederName}/g, seederName);
 
       fs.writeFile(targetFile, fileContent, (err) => {
         if (err) {
-          console.error("Error writing model file:", err);
+          console.error("Error writing seeder file:", err);
           return;
         }
 
-        console.log(`Model ${name} created successfully at ${targetFile}`);
+        console.log(
+          `Seeder ${seederName} created successfully at ${targetFile}`
+        );
       });
     });
   });

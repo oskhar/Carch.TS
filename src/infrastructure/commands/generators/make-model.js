@@ -6,7 +6,7 @@ const program = new Command();
 
 program
   .arguments("<name>")
-  .description("Generate a new router")
+  .description("Generate a new model")
   .action((name) => {
     if (!name) {
       console.error("Error: Name argument is required");
@@ -15,10 +15,10 @@ program
 
     name = name.toLowerCase();
 
-    const routerClass = `${name.charAt(0).toUpperCase()}${name.slice(1)}`;
-    const targetDir = path.join(__dirname, "../../presentation", "routers");
-    const targetFile = path.join(targetDir, `${name}-router.ts`);
-    const stubFile = path.join(__dirname, "../stubs", "router.ts.stub");
+    const modelClass = `${name.charAt(0).toUpperCase()}${name.slice(1)}`;
+    const targetDir = path.join(__dirname, "../../../domain", "models");
+    const targetFile = path.join(targetDir, `${name}.ts`);
+    const stubFile = path.join(__dirname, "../../stubs", "model.ts.stub");
 
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir, { recursive: true });
@@ -30,17 +30,15 @@ program
         return;
       }
 
-      const fileContent = data
-        .replace(/{RouterName}/g, name)
-        .replace(/{RouterClass}/g, routerClass);
+      const fileContent = data.replace(/{ModelClass}/g, modelClass);
 
       fs.writeFile(targetFile, fileContent, (err) => {
         if (err) {
-          console.error("Error writing router file:", err);
+          console.error("Error writing model file:", err);
           return;
         }
 
-        console.log(`Router ${name} created successfully at ${targetFile}`);
+        console.log(`Model ${name} created successfully at ${targetFile}`);
       });
     });
   });

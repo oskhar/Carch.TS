@@ -8,8 +8,9 @@ export interface CategoriesDataSource {
   getAll(
     filter: ApiSimpleFilter
   ): Promise<{ items: CategoriesResponseModel[]; total: number }>;
-  create(category: CategoriesRequestModel): void;
-  updateOne(id: string, category: CategoriesRequestModel): void;
+  create(categories: CategoriesRequestModel): Promise<void>;
+  updateOne(id: string, categories: CategoriesRequestModel): Promise<void>;
   getOne(id: string): Promise<CategoriesResponseModel | null>;
-  deleteOne(id: string): void;
+  deleteOne(id: string): Promise<void>;
+  find(payload: string, value?: any): Promise<boolean>;
 }

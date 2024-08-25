@@ -11,5 +11,5 @@ export interface CategoriesUseCase {
   createOne(categories: CategoriesRequestModel): void;
   deleteOne(id: string): void;
   getOne(id: string): Promise<CategoriesResponseModel>;
-  updateOne(id: string, category: CategoriesRequestModel): void;
+  updateOne(id: string, categories: CategoriesRequestModel): void;
 }

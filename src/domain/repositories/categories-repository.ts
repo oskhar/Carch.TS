@@ -1,5 +1,6 @@
 import { ApiSimpleFilter } from "../../data/APIs/type/api-simple-filter";
 import { CategoriesDataSource } from "../../data/interfaces/data-sources/categories-data-sources";
+import { handleQueryException } from "../../errors/handler/handle-query-exception";
 import { CategoriesRepository } from "../interfaces/repositories/categories-repository";
 import {
   CategoriesRequestModel,
@@ -7,28 +8,36 @@ import {
 } from "../models/categories";
 
 export class CategoriesRepositoryImpl implements CategoriesRepository {
-  constructor(protected categoriesDataSource: CategoriesDataSource) {}
+  constructor(protected categoriesDataSource: CategoriesDataSource) {
+    return handleQueryException(this);
+  }
+
+  async find(payload: string, value?: any): Promise<boolean> {
+    return await this.categoriesDataSource.find(payload, value);
+  }
 
   async getCategories(
     filter: ApiSimpleFilter
   ): Promise<{ items: CategoriesResponseModel[]; total: number }> {
-    const result = await this.categoriesDataSource.getAll(filter);
-    return result;
+    return await this.categoriesDataSource.getAll(filter);
   }
 
-  createOne(categories: CategoriesRequestModel): void {
+  async createOne(categories: CategoriesRequestModel): Promise<void> {
     this.categoriesDataSource.create(categories);
   }
 
-  deleteOne(id: string): void {
+  async deleteOne(id: string): Promise<void> {
     this.categoriesDataSource.deleteOne(id);
   }
 
-  getOne(id: string): Promise<CategoriesResponseModel> {
-    throw new Error("Method not implemented.");
+  async getOne(id: string): Promise<CategoriesResponseModel | null> {
+    return await this.categoriesDataSource.getOne(id);
   }
 
-  updateOne(id: string, categories: CategoriesRequestModel): void {
-    throw new Error("Method not implemented.");
+  async updateOne(
+    id: string,
+    categories: CategoriesRequestModel
+  ): Promise<void> {
+    await this.categoriesDataSource.updateOne(id, categories);
   }
 }

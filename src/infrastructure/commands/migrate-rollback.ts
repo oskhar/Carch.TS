@@ -1,4 +1,3 @@
-// rollback.ts
 import { Command } from "commander";
 import fs from "fs";
 import path from "path";
@@ -11,7 +10,7 @@ const program = new Command();
 const migrationsDir = path.resolve(__dirname, "../database/pg/migrations");
 const pool = new Pool({
   host: process.env.DB_HOST || "localhost",
-  port: parseInt(process.env.DB_PORT as string, 10) || 5432,
+  port: parseInt(process.env.DB_PORT as string) || 5432,
   user: process.env.DB_USERNAME || "postgres",
   password: process.env.DB_PASSWORD || "",
   database: process.env.DB_DATABASE || "express",
@@ -24,7 +23,7 @@ async function rollbackMigrations() {
     const files = fs
       .readdirSync(migrationsDir)
       .filter((file) => file.endsWith(".ts"))
-      .reverse(); // Reverse the order of migrations
+      .reverse();
 
     for (const file of files) {
       const filePath = path.join(migrationsDir, file);

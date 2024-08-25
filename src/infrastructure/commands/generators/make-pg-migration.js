@@ -27,9 +27,9 @@ program
       1
     )}Migration`;
 
-    const targetDir = path.join(__dirname, "../database/pg/migrations");
+    const targetDir = path.join(__dirname, "../../database/pg/migrations");
     const targetFile = path.join(targetDir, `${migrationName}.ts`);
-    const stubFile = path.join(__dirname, "../stubs/pg-migration.ts.stub");
+    const stubFile = path.join(__dirname, "../../stubs/pg-migration.ts.stub");
 
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir, { recursive: true });

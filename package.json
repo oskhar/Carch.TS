@@ -4,9 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch 'src/**/*.ts' --exec './node_modules/.bin/ts-node' src/main.ts",
-    "make:router": "node src/infrastructure/commands/make-router.js",
-    "make:migration": "node src/infrastructure/commands/make-pg-migration.js",
-    "make:seeder": "node src/infrastructure/commands/make-pg-seeder.js",
+    "make:router": "node src/infrastructure/commands/generators/make-router.js",
+    "make:migration": "node src/infrastructure/commands/generators/make-pg-migration.js",
+    "make:seeder": "node src/infrastructure/commands/generators/make-pg-seeder.js",
     "migrate": "ts-node src/infrastructure/commands/migrate.ts",
     "migrate:rollback": "ts-node src/infrastructure/commands/migrate-rollback.ts",
     "migrate:refresh": "ts-node src/infrastructure/commands/migrate-refresh.ts",
@@ -21,7 +21,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "joi": "^17.13.3",
-    "pg": "^8.12.0"
+    "pg": "^8.12.0",
+    "winston": "^3.14.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",

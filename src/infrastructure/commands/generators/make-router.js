@@ -6,17 +6,19 @@ const program = new Command();
 
 program
   .arguments("<name>")
-  .description("Generate a new seeder")
+  .description("Generate a new router")
   .action((name) => {
     if (!name) {
       console.error("Error: Name argument is required");
       process.exit(1);
     }
 
-    const seederName = name.charAt(0).toUpperCase() + name.slice(1);
-    const targetDir = path.join(__dirname, "../database/pg/seeder");
-    const targetFile = path.join(targetDir, `${name}-seeder.ts`);
-    const stubFile = path.join(__dirname, "../stubs", "seeder.ts.stub");
+    name = name.toLowerCase();
+
+    const routerClass = `${name.charAt(0).toUpperCase()}${name.slice(1)}`;
+    const targetDir = path.join(__dirname, "../../../presentation", "routers");
+    const targetFile = path.join(targetDir, `${name}-router.ts`);
+    const stubFile = path.join(__dirname, "../../stubs", "router.ts.stub");
 
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir, { recursive: true });
@@ -28,17 +30,17 @@ program
         return;
       }
 
-      const fileContent = data.replace(/{SeederName}/g, seederName);
+      const fileContent = data
+        .replace(/{RouterName}/g, name)
+        .replace(/{RouterClass}/g, routerClass);
 
       fs.writeFile(targetFile, fileContent, (err) => {
         if (err) {
-          console.error("Error writing seeder file:", err);
+          console.error("Error writing router file:", err);
           return;
         }
 
-        console.log(
-          `Seeder ${seederName} created successfully at ${targetFile}`
-        );
+        console.log(`Router ${name} created successfully at ${targetFile}`);
       });
     });
   });

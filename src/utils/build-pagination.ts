@@ -1,7 +1,5 @@
-import {
-  LinkPagination,
-  Pagination,
-} from "../../data/APIs/type/api-pagination";
+import { LinkPagination, Pagination } from "../data/APIs/type/api-pagination";
+import { DataNotFound } from "../errors/exceptions/data-not-found";
 
 export function buildPagination(
   currentPage: number,
@@ -10,6 +8,11 @@ export function buildPagination(
   totalPages: number,
   currentSearch?: string
 ): Pagination {
+  if (currentPage > totalPages && totalPages > 0)
+    throw new DataNotFound(
+      "You have exceeded the maximum page limit. Please check the available pages and try again."
+    );
+
   const buildQueryString = (page: number) => {
     let queryString = `?page=${page}&length=${perPage}`;
     if (currentSearch) {

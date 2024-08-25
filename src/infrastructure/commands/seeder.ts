@@ -9,7 +9,7 @@ const program = new Command();
 
 const pool = new Pool({
   host: process.env.DB_HOST || "localhost",
-  port: parseInt(process.env.DB_PORT as string, 10) || 5432,
+  port: parseInt(process.env.DB_PORT as string) || 5432,
   user: process.env.DB_USERNAME || "postgres",
   password: process.env.DB_PASSWORD || "",
   database: process.env.DB_DATABASE || "express",

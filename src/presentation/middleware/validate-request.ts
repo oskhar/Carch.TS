@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Schema } from "joi";
+import { ApiStatusEnum } from "../../data/APIs/enums/api-status-enum";
+import { InvalidRequest } from "../../errors/exceptions/invalid-request";
 
 export function validateRequest(schema: Schema) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -8,14 +10,11 @@ export function validateRequest(schema: Schema) {
 
     const { error, value } = schema.validate(data, {
       allowUnknown: true,
+      abortEarly: false,
     });
 
     if (error) {
-      return res.status(400).json({
-        status: false,
-        message: "Invalid parameters",
-        errors: error.details.map((detail) => detail.message),
-      });
+      throw new InvalidRequest(error.details.map((detail) => detail.message));
     }
 
     if (source === "body") {
