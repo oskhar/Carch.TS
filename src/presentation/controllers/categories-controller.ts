@@ -7,14 +7,17 @@ import { ApiSimpleSortEnum } from "../../data/enums/api-simple-sort-enum";
 import { CategoriesUseCase } from "../../domain/interfaces/use-case/categories-use-case";
 import { ApiStatusEnum } from "../../data/enums/api-status-enum";
 import { RouterNotImplemented } from "../../errors/exceptions/router-nor-implemented";
+import { wrapAsyncHandler } from "../../errors/handler/wrap-async-handler";
 
 export class CategoriesController {
-  constructor(private categoriesUseCase: CategoriesUseCase) {}
+  constructor(private categoriesUseCase: CategoriesUseCase) {
+    return wrapAsyncHandler(this);
+  }
 
   public getAll = async (req: Request, res: Response) => {
     const filter: ApiSimpleFilter = {
       page: parseInt(req.query.page as string),
-      perPage: parseInt(req.query.perPage as string),
+      perPage: parseInt(req.query.per_page as string),
       search: req.query.search as string,
       sort: req.query.sort as ApiSimpleSortEnum,
     };

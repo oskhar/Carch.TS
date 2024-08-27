@@ -1,8 +1,8 @@
 import express from "express";
-import { validateRequest } from "../middleware/validate-request";
+import { validateRequestMiddleware } from "../middleware/validate-request-middleware";
 import Joi from "joi";
 import { CategoriesUseCase } from "../../domain/interfaces/use-case/categories-use-case";
-import { asyncHandler } from "../middleware/async-hendler";
+import { asyncHandler } from "../../utils/async-hendler";
 import { CategoriesController } from "../controllers/categories-controller";
 
 export function CategoriesRouter(categoriesUseCase: CategoriesUseCase) {
@@ -18,7 +18,7 @@ export function CategoriesRouter(categoriesUseCase: CategoriesUseCase) {
    */
   const getPaginationSchema = Joi.object({
     page: Joi.number().integer().min(1).default(1).optional(),
-    length: Joi.number().integer().min(1).default(10).optional(),
+    per_page: Joi.number().integer().min(1).default(10).optional(),
     search: Joi.string().optional().allow(""),
     sort: Joi.string()
       .valid("latest", "oldest", "a-z", "z-a")
@@ -34,16 +34,16 @@ export function CategoriesRouter(categoriesUseCase: CategoriesUseCase) {
    */
   router
     .route(`/${baseUrl}/`)
-    .get(validateRequest(getPaginationSchema), asyncHandler(controller.getAll))
-    .post(validateRequest(createUpdateSchema), asyncHandler(controller.create));
+    .get(validateRequestMiddleware(getPaginationSchema), controller.getAll)
+    .post(validateRequestMiddleware(createUpdateSchema), controller.create);
 
   /**
    * define router PUT & DELETE categories with param
    */
   router
     .route(`/${baseUrl}/:id`)
-    .put(validateRequest(createUpdateSchema), asyncHandler(controller.update))
-    .delete(asyncHandler(controller.delete));
+    .put(validateRequestMiddleware(createUpdateSchema), controller.update)
+    .delete(controller.delete);
 
   /**
    * bouncing defined router

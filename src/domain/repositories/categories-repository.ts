@@ -1,6 +1,6 @@
 import { ApiSimpleFilter } from "../../data/type/api-simple-filter";
 import { CategoriesDataSource } from "../../data/interfaces/data-sources/categories-data-sources";
-import { handleQueryException } from "../../errors/handler/handle-query-exception";
+import { wrapRepositoryException } from "../../errors/handler/wrap-repository-exception";
 import { CategoriesRepository } from "../interfaces/repositories/categories-repository";
 import {
   CategoriesRequestModel,
@@ -9,7 +9,7 @@ import {
 
 export class CategoriesRepositoryImpl implements CategoriesRepository {
   constructor(protected categoriesDataSource: CategoriesDataSource) {
-    return handleQueryException(this);
+    return wrapRepositoryException(this);
   }
 
   async find(payload: string, value?: any): Promise<boolean> {

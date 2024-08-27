@@ -6,7 +6,7 @@ import { ApiSimpleFilter } from "../../data/APIs/type/api-simple-filter";
 import { ApiSimpleSortEnum } from "../../data/APIs/enums/api-simple-sort-enum";
 import { {ControllerClass}UseCase } from "../../domain/interfaces/use-case/{ControllerName}-use-case";
 import { ApiStatusEnum } from "../../data/APIs/enums/api-status-enum";
-import { validateRequest } from "../middleware/validate-request";
+import { validateRequestMiddleware } from "../middleware/validate-request";
 import Joi from "joi";
 import { RouterNotImplemented } from "../../errors/exceptions/router-nor-implemented";
 

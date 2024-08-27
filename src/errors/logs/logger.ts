@@ -3,7 +3,7 @@ import { createLogger, format, transports } from "winston";
 const { combine, timestamp, printf } = format;
 
 const fileFormat = printf(({ level, message, timestamp }) => {
-  return `${timestamp} [${level}]: ${message}`;
+  return `${timestamp} [${level}]: ${message} \n\n==============================================\n\n`;
 });
 
 const consoleFormat = printf(({ level, timestamp }) => {
@@ -26,10 +26,10 @@ const logger = createLogger({
       level: "error",
       format: combine(timestamp(), fileFormat),
     }),
-    new transports.File({
-      filename: "logs/combined.log",
-      format: combine(timestamp(), fileFormat),
-    }),
+    // new transports.File({
+    //   filename: "logs/combined.log",
+    //   format: combine(timestamp(), fileFormat),
+    // }),
   ],
 });
 

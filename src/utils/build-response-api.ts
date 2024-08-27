@@ -9,7 +9,7 @@ import { ApiResponseError } from "../data/type/api-response-error";
 import { generateUUIDv4 } from "./generate-uuid-v4";
 
 export class BuildResponseApi {
-  constructor(private req: Request, private res: Response) {}
+  constructor(private readonly req: Request, private readonly res: Response) {}
 
   execute<T>(
     data?: T,

@@ -22,7 +22,6 @@ program
       fs.mkdirSync(targetDir, { recursive: true });
     }
 
-    // Cek apakah file sudah ada
     if (fs.existsSync(targetFile)) {
       console.error(
         `Error: Seeder ${seederName} already exists at ${targetFile}`

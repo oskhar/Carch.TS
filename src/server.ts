@@ -1,12 +1,13 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import { inspect } from "util";
 import { SQLDatabaseWrapper } from "./data/interfaces/database/sql-database-wrapper";
 import { buildResponseMiddleware } from "./presentation/middleware/build-response-middleware";
 import { requestIdMiddleware } from "./presentation/middleware/request-id-middleware";
 import { exceptionsRender } from "./errors/handler/exceptions-render";
-import { checkRouterImplemented } from "./presentation/middleware/check-router-implemented";
+import { checkRouterImplementedMiddleware } from "./presentation/middleware/check-router-implemented-middleware";
 import logger from "./errors/logs/logger";
 import bundledRouter from "./presentation/routers/all-router-bundle-v1";
+import { asyncHandler } from "./utils/async-hendler";
 
 export async function startServer(db: SQLDatabaseWrapper) {
   /**
@@ -31,10 +32,21 @@ export async function startServer(db: SQLDatabaseWrapper) {
   for (const router of bundledRouter(db)) server.use("/api/v1", router);
 
   /**
+   * Async handler
+   */
+  server._router.stack.forEach((middleware: any) => {
+    if (middleware.route) {
+      middleware.route.stack.forEach((handler: any) => {
+        handler.handle = asyncHandler(handler.handle);
+      });
+    }
+  });
+
+  /**
    * Exception
    *
    */
-  server.use(checkRouterImplemented);
+  server.use(checkRouterImplementedMiddleware);
   server.use(exceptionsRender);
 
   /**

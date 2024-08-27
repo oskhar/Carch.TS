@@ -2,7 +2,7 @@ import {
   CategoriesRequestModel,
   CategoriesResponseModel,
 } from "../../../domain/models/categories";
-import { ForbiddenException } from "../../../errors/exceptions/forbidden-exception";
+import { Forbidden } from "../../../errors/exceptions/forbidden";
 import { isNumeric } from "../../../utils/string-checker";
 import { getSortOption, SortOption } from "../../enums/api-simple-sort-enum";
 import { ApiSimpleFilter } from "../../type/api-simple-filter";
@@ -17,7 +17,7 @@ export class PGCategoriesDataSource implements CategoriesDataSource {
 
   async find(payload: string, value?: any): Promise<boolean> {
     if (!this.exposed_columns.includes(payload) && !isNumeric(payload))
-      throw new ForbiddenException("Invalid column or bypass attempt.");
+      throw new Forbidden("Invalid column or bypass attempt.");
 
     let query: string = `SELECT 1 FROM ${this.db_table} WHERE id = $1 LIMIT 1`;
     let queryParam: any = payload;
@@ -35,17 +35,15 @@ export class PGCategoriesDataSource implements CategoriesDataSource {
   async getAll(
     filter: ApiSimpleFilter
   ): Promise<{ items: CategoriesResponseModel[]; total: number }> {
-    const { page, perPage, search, sort } = filter;
-
     let query = `SELECT * FROM ${this.db_table}`;
     let countQuery = `SELECT COUNT(*) FROM ${this.db_table}`;
     const values: string[] = [];
     const conditions: string[] = [];
-    const sortOption: SortOption = getSortOption(sort);
+    const sortOption: SortOption = getSortOption(filter.sort);
 
-    if (search) {
+    if (filter.search) {
       conditions.push("name ILIKE $1");
-      values.push(`%${search}%`);
+      values.push(`%${filter.search}%`);
     }
 
     if (conditions.length > 0) {
@@ -56,7 +54,7 @@ export class PGCategoriesDataSource implements CategoriesDataSource {
     query += ` ORDER BY ${sortOption.column} ${sortOption.direction}`;
     query += ` LIMIT $${values.length + 1} OFFSET $${values.length + 2}`;
 
-    values.push(`${perPage}`, `${(page - 1) * perPage}`);
+    values.push(`${filter.perPage}`, `${(filter.page - 1) * filter.perPage}`);
 
     const dbResponse = await this.db.query(query, values);
 

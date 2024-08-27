@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { RouterNotImplemented } from "../../errors/exceptions/router-nor-implemented";
 
-export function checkRouterImplemented(
+export function checkRouterImplementedMiddleware(
   req: Request,
   res: Response,
   next: NextFunction

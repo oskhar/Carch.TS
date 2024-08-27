@@ -1,5 +1,5 @@
 import express from "express";
-import { validateRequest } from "../middleware/validate-request";
+import { validateRequestMiddleware } from "../middleware/validate-request";
 import Joi from "joi";
 import { {RouterClass}UseCase } from "../../domain/interfaces/use-case/{RouterName}-use-case";
 import { asyncHandler } from "../middleware/async-hendler";
@@ -34,15 +34,15 @@ export function {RouterClass}Router({RouterName}UseCase: {RouterClass}UseCase) {
    */
   router
     .route(`${BASE_URL}/`)
-    .get(validateRequest(getPaginationSchema), asyncHandler(controller.getAll))
-    .post(validateRequest(createUpdateSchema), asyncHandler(controller.create));
+    .get(validateRequestMiddleware(getPaginationSchema), asyncHandler(controller.getAll))
+    .post(validateRequestMiddleware(createUpdateSchema), asyncHandler(controller.create));
 
   /**
    * define router PUT & DELETE {RouterName} with param
    */
   router
     .route(`/${BASE_URL}/:id`)
-    .put(validateRequest(createUpdateSchema), asyncHandler(controller.update))
+    .put(validateRequestMiddleware(createUpdateSchema), asyncHandler(controller.update))
     .delete(asyncHandler(controller.delete));
 
   /**
