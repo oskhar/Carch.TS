@@ -1,0 +1,41 @@
+import { ApiSimpleFilter } from "../../presentation/type/api-simple-filter";
+import { {RepositoryClass}DataSource } from "../../data/interfaces/data-sources/{RepositoryName}-data-sources";
+import { wrapRepositoryException } from "../../errors/handler/wrap-repository-exception";
+import { {RepositoryClass}Repository } from "../interfaces/repositories/{RepositoryName}-repository";
+import {
+  {RepositoryClass}RequestModel,
+  {RepositoryClass}ResponseModel,
+} from "../models/{RepositoryName}";
+
+export class {RepositoryClass}RepositoryImpl implements {RepositoryClass}Repository {
+  constructor(private readonly {RepositoryName}DataSource: {RepositoryClass}DataSource) {
+    return wrapRepositoryException(this);
+  }
+
+  async get{RepositoryClass}(
+    filter: ApiSimpleFilter
+  ): Promise<{ items: {RepositoryClass}ResponseModel[]; total: number }> {
+    return await this.{RepositoryName}DataSource.getAll(filter);
+  }
+
+  async createOne({RepositoryName}: {RepositoryClass}RequestModel): Promise<void> {
+    this.{RepositoryName}DataSource.create({RepositoryName});
+  }
+
+  async deleteOne(id: string): Promise<void> {
+    this.{RepositoryName}DataSource.deleteOne(id);
+  }
+
+  async getOne(
+    payload: string | Record<string, string>
+  ): Promise<{RepositoryClass}ResponseModel | null> {
+    return await this.{RepositoryName}DataSource.getOne(payload);
+  }
+
+  async updateOne(
+    id: string,
+    {RepositoryName}: {RepositoryClass}RequestModel
+  ): Promise<void> {
+    await this.{RepositoryName}DataSource.updateOne(id, {RepositoryName});
+  }
+}

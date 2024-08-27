@@ -16,12 +16,17 @@ program
     name = name.toLowerCase();
 
     const modelClass = `${name.charAt(0).toUpperCase()}${name.slice(1)}`;
-    const targetDir = path.join(__dirname, "../../../domain", "models");
+    const targetDir = path.join(__dirname, "../../../src/domain", "models");
     const targetFile = path.join(targetDir, `${name}.ts`);
     const stubFile = path.join(__dirname, "../../stubs", "model.ts.stub");
 
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir, { recursive: true });
+    }
+
+    if (fs.existsSync(targetFile)) {
+      console.error(`Error: Model ${name} already exists at ${targetFile}`);
+      process.exit(1);
     }
 
     fs.readFile(stubFile, "utf8", (err, data) => {

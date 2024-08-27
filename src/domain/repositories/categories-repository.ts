@@ -1,5 +1,5 @@
 import { ApiSimpleFilter } from "../../presentation/type/api-simple-filter";
-import { CategoriesDataSource } from "../../data/interfaces/data-sources/categories-data-sources";
+import { CategoriesDataSource } from "../../infrastructure/interfaces/data-sources/categories-data-sources";
 import { wrapRepositoryException } from "../../errors/handler/wrap-repository-exception";
 import { CategoriesRepository } from "../interfaces/repositories/categories-repository";
 import {
@@ -10,10 +10,6 @@ import {
 export class CategoriesRepositoryImpl implements CategoriesRepository {
   constructor(private readonly categoriesDataSource: CategoriesDataSource) {
     return wrapRepositoryException(this);
-  }
-
-  async find(payload: string, value?: any): Promise<boolean> {
-    return await this.categoriesDataSource.find(payload, value);
   }
 
   async getCategories(
@@ -30,8 +26,10 @@ export class CategoriesRepositoryImpl implements CategoriesRepository {
     this.categoriesDataSource.deleteOne(id);
   }
 
-  async getOne(id: string): Promise<CategoriesResponseModel | null> {
-    return await this.categoriesDataSource.getOne(id);
+  async getOne(
+    payload: string | Record<string, string>
+  ): Promise<CategoriesResponseModel | null> {
+    return await this.categoriesDataSource.getOne(payload);
   }
 
   async updateOne(

@@ -1,6 +1,6 @@
 import express, { NextFunction } from "express";
 import { inspect } from "util";
-import { SQLDatabaseWrapper } from "./data/interfaces/database/sql-database-wrapper";
+import { SQLDatabaseWrapper } from "./infrastructure/interfaces/database/sql-database-wrapper";
 import { buildResponseMiddleware } from "./presentation/middleware/build-response-middleware";
 import { requestIdMiddleware } from "./presentation/middleware/request-id-middleware";
 import { exceptionsRender } from "./errors/handler/exceptions-render";

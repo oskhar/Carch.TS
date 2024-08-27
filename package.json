@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch 'src/**/*.ts' --exec './node_modules/.bin/ts-node' src/main.ts",
-    "infras": "node src/infrastructure/commands/bundle.js"
+    "swift": "node development/commands/bundle.js"
   },
   "keywords": [],
   "author": "",

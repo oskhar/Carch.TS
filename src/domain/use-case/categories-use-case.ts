@@ -22,7 +22,7 @@ export class CategoriesUseCaseImpl implements CategoriesUseCase {
   }
 
   async createOne(categories: CategoriesRequestModel): Promise<void> {
-    if (await this.categoriesRepository.find("name", categories.name))
+    if (await this.categoriesRepository.getOne({ name: categories.name }))
       throw new ConflictUniqueData(
         `"name" is unique and [${categories.name}] already exists`
       );
@@ -30,7 +30,7 @@ export class CategoriesUseCaseImpl implements CategoriesUseCase {
   }
 
   async deleteOne(id: string): Promise<void> {
-    if (!(await this.categoriesRepository.find(id)))
+    if (!(await this.categoriesRepository.getOne(id)))
       throw new DataNotFound(`Category with id ${id} not found`);
 
     await this.categoriesRepository.deleteOne(id);
@@ -47,7 +47,7 @@ export class CategoriesUseCaseImpl implements CategoriesUseCase {
     id: string,
     categories: CategoriesRequestModel
   ): Promise<void> {
-    if (!(await this.categoriesRepository.find(id)))
+    if (!(await this.categoriesRepository.getOne(id)))
       throw new DataNotFound(`Category with id ${id} not found`);
 
     await this.categoriesRepository.updateOne(id, categories);

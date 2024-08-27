@@ -3,7 +3,7 @@ import {
   CategoriesResponseModel,
 } from "../../../domain/models/categories";
 import { Forbidden } from "../../../errors/exceptions/forbidden";
-import { isNumeric } from "../../../infrastructure/utils/string-checker";
+import { isNumeric } from "../../utils/string-checker";
 import {
   getSortOption,
   SortOption,
@@ -17,23 +17,6 @@ export class PGCategoriesDataSource implements CategoriesDataSource {
   private readonly exposed_columns = ["name"];
 
   constructor(private readonly db: SQLDatabaseWrapper) {}
-
-  async find(payload: string, value?: any): Promise<boolean> {
-    if (!this.exposed_columns.includes(payload) && !isNumeric(payload))
-      throw new Forbidden("Invalid column or bypass attempt.");
-
-    let query: string = `SELECT 1 FROM ${this.db_table} WHERE id = $1 LIMIT 1`;
-    let queryParam: any = payload;
-
-    if (!isNumeric(payload)) {
-      query = `SELECT 1 FROM ${this.db_table} WHERE ${payload} = $1 LIMIT 1`;
-      queryParam = value;
-    }
-
-    const { rows } = await this.db.query(query, [queryParam]);
-
-    return rows.length > 0;
-  }
 
   async getAll(
     filter: ApiSimpleFilter
@@ -102,15 +85,34 @@ export class PGCategoriesDataSource implements CategoriesDataSource {
     );
   }
 
-  async getOne(id: string): Promise<CategoriesResponseModel | null> {
-    const result = await this.db.query(
-      `SELECT * FROM ${this.db_table} WHERE id = $1`,
-      [id]
-    );
-    if (result.rows.length === 0) return null;
+  async getOne(
+    payload: string | Record<string, string>
+  ): Promise<CategoriesResponseModel | null> {
+    const isString = typeof payload === "string";
+    const queryParam = isString ? [payload] : Object.values(payload);
+    const conditions = isString
+      ? "id = $1"
+      : Object.keys(payload)
+          .filter((key) => {
+            if (!this.exposed_columns.includes(key))
+              throw new Forbidden("Invalid column or bypass attempt.");
+            return true;
+          })
+          .map((key, index) => `${key} = $${index + 1}`)
+          .join(" AND ");
 
-    const { name, created_at, updated_at } = result.rows[0];
-    return { id, name, created_at, updated_at };
+    const query = `SELECT * FROM ${this.db_table} WHERE ${conditions} LIMIT 1`;
+    const { rows } = await this.db.query(query, queryParam);
+
+    if (rows.length === 0) return null;
+
+    const row = rows[0];
+    return {
+      id: row.id,
+      name: row.name,
+      created_at: row.created_at,
+      updated_at: row.updated_at,
+    } as CategoriesResponseModel;
   }
 
   async deleteOne(id: string): Promise<void> {

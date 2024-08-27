@@ -1,0 +1,17 @@
+import { ApiSimpleFilter } from "../../../presentation/type/api-simple-filter";
+import {
+  {RepositoryClass}RequestModel,
+  {RepositoryClass}ResponseModel,
+} from "../../models/{RepositoryName}";
+
+export interface {RepositoryClass}Repository {
+  {getRepositoryClass}(
+    filter: ApiSimpleFilter
+  ): Promise<{ items: {RepositoryClass}ResponseModel[]; total: number }>;
+  createOne({RepositoryName}: {RepositoryClass}RequestModel): void;
+  deleteOne(id: string): void;
+  getOne(
+    payload: string | Record<string, string>
+  ): Promise<{RepositoryClass}ResponseModel | null>;
+  updateOne(id: string, category: {RepositoryClass}RequestModel): void;
+}

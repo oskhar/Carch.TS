@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 import { startServer } from "./server";
-import { PGDatabaseConfig } from "./data/interfaces/database/pg-database-config";
+import { PGDatabaseConfig } from "./infrastructure/interfaces/database/pg-database-config";
 import { Pool } from "pg";
-import { SQLDatabaseWrapper } from "./data/interfaces/database/sql-database-wrapper";
+import { SQLDatabaseWrapper } from "./infrastructure/interfaces/database/sql-database-wrapper";
 
 dotenv.config();
 

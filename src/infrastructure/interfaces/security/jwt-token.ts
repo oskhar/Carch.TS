@@ -1,7 +1,10 @@
-import { SignedToken } from "../../../domain/models/authentication";
+import {
+  AuthenticationPayload,
+  AuthenticationResponseModel,
+} from "../../../domain/models/authentication";
 
 export interface JwtToken {
-  signAccessToken(userId: string): SignedToken;
-  signRefreshToken(userId: string): SignedToken;
-  verify(jwtToken: string, isAccessToken?: boolean): string;
+  signAccessToken(data: AuthenticationPayload): AuthenticationResponseModel;
+  signRefreshToken(data: AuthenticationPayload): AuthenticationResponseModel;
+  verify(jwtToken: string, isAccessToken?: boolean): AuthenticationPayload;
 }

@@ -1,23 +1,25 @@
 import jwt from "jsonwebtoken";
 import { buildFutureDate } from "../utils/build-future-date";
 import { JwtToken } from "../interfaces/security/jwt-token";
-import { SignedToken } from "../../domain/models/authentication";
+import {
+  AuthenticationPayload,
+  AuthenticationResponseModel,
+} from "../../domain/models/authentication";
 
 export class JwtTokenAdapter implements JwtToken {
   constructor(
-    // These values can be configured in .env file
     private readonly secret: string,
     private readonly refreshSecret: string,
-    private readonly accessTokenExpirationInSeconds = 3600, // 1 hours default
-    private readonly refreshTokenExpirationInSeconds = 691200 // 8 days default
+    private readonly accessTokenExpirationInSeconds = 3600,
+    private readonly refreshTokenExpirationInSeconds = 691200
   ) {}
 
-  signAccessToken(userId: string): SignedToken {
+  signAccessToken(data: AuthenticationPayload): AuthenticationResponseModel {
     const expiresAt = buildFutureDate(
       new Date(),
       this.accessTokenExpirationInSeconds
     );
-    const accessToken = jwt.sign({ id: userId }, this.secret, {
+    const accessToken = jwt.sign(data, this.secret, {
       expiresIn: this.accessTokenExpirationInSeconds,
     });
 
@@ -27,12 +29,12 @@ export class JwtTokenAdapter implements JwtToken {
     };
   }
 
-  signRefreshToken(userId: string): SignedToken {
+  signRefreshToken(data: AuthenticationPayload): AuthenticationResponseModel {
     const expiresAt = buildFutureDate(
       new Date(),
       this.refreshTokenExpirationInSeconds
     );
-    const accessToken = jwt.sign({ id: userId }, this.refreshSecret, {
+    const accessToken = jwt.sign(data, this.refreshSecret, {
       expiresIn: this.refreshTokenExpirationInSeconds,
     });
 
@@ -42,10 +44,12 @@ export class JwtTokenAdapter implements JwtToken {
     };
   }
 
-  verify(accessToken: string, isAccessToken: boolean = true): string {
+  verify(
+    accessToken: string,
+    isAccessToken: boolean = true
+  ): AuthenticationPayload {
     const secret = isAccessToken ? this.secret : this.refreshSecret;
-    const userData = jwt.verify(accessToken, secret) as { id: string };
-    return userData.id;
+    return jwt.verify(accessToken, secret) as AuthenticationPayload;
   }
 }
 

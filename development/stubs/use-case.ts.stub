@@ -1,0 +1,55 @@
+import { ApiSimpleFilter } from "../../presentation/type/api-simple-filter";
+import { ConflictUniqueData } from "../../errors/exceptions/conflict-unique-data";
+import { DataNotFound } from "../../errors/exceptions/data-not-found";
+import { {UseCaseClass}Repository } from "../interfaces/repositories/{UseCaseName}-repository";
+import { {UseCaseClass}UseCase } from "../interfaces/use-case/{UseCaseName}-use-case";
+import {
+  {UseCaseClass}ResponseModel,
+  {UseCaseClass}RequestModel,
+} from "../models/{UseCaseName}";
+
+export class {UseCaseClass}UseCaseImpl implements {UseCaseClass}UseCase {
+  constructor(private readonly {UseCaseName}Repository: {UseCaseClass}Repository) {}
+
+  async get{UseCaseClass}(
+    filter: ApiSimpleFilter
+  ): Promise<{ items: {UseCaseClass}ResponseModel[]; total: number }> {
+    const result = await this.{UseCaseName}Repository.get{UseCaseClass}(filter);
+
+    if (result.total < 1) throw new DataNotFound("{UseCaseClass} is empty");
+
+    return result;
+  }
+
+  async createOne({UseCaseName}: {UseCaseClass}RequestModel): Promise<void> {
+    if (await this.{UseCaseName}Repository.getOne({ name: {UseCaseName}.name }))
+      throw new ConflictUniqueData(
+        `"name" is unique and [${{UseCaseName}.name}] already exists`
+      );
+    await this.{UseCaseName}Repository.createOne({UseCaseName});
+  }
+
+  async deleteOne(id: string): Promise<void> {
+    if (!(await this.{UseCaseName}Repository.getOne(id)))
+      throw new DataNotFound(`Category with id ${id} not found`);
+
+    await this.{UseCaseName}Repository.deleteOne(id);
+  }
+
+  async getOne(id: string): Promise<{UseCaseClass}ResponseModel> {
+    const result = await this.{UseCaseName}Repository.getOne(id);
+    if (!result) throw new DataNotFound("Category with id ${id} not found");
+
+    return result;
+  }
+
+  async updateOne(
+    id: string,
+    {UseCaseName}: {UseCaseClass}RequestModel
+  ): Promise<void> {
+    if (!(await this.{UseCaseName}Repository.getOne(id)))
+      throw new DataNotFound(`Category with id ${id} not found`);
+
+    await this.{UseCaseName}Repository.updateOne(id, {UseCaseName});
+  }
+}

@@ -10,7 +10,8 @@ export interface CategoriesRepository {
   ): Promise<{ items: CategoriesResponseModel[]; total: number }>;
   createOne(categories: CategoriesRequestModel): void;
   deleteOne(id: string): void;
-  getOne(id: string): Promise<CategoriesResponseModel | null>;
+  getOne(
+    payload: string | Record<string, string>
+  ): Promise<CategoriesResponseModel | null>;
   updateOne(id: string, category: CategoriesRequestModel): void;
-  find(payload: string, value?: any): Promise<boolean>;
 }

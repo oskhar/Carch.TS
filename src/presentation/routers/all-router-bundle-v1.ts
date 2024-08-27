@@ -1,5 +1,5 @@
-import { PGCategoriesDataSource } from "../../data/data-sources/pg/pg-category-data-source";
-import { SQLDatabaseWrapper } from "../../data/interfaces/database/sql-database-wrapper";
+import { PGCategoriesDataSource } from "../../infrastructure/data-sources/pg/pg-category-data-source";
+import { SQLDatabaseWrapper } from "../../infrastructure/interfaces/database/sql-database-wrapper";
 import { CategoriesRepositoryImpl } from "../../domain/repositories/categories-repository";
 import { CategoriesUseCaseImpl } from "../../domain/use-case/categories-use-case";
 import { CategoriesRouter } from "./categories-router";

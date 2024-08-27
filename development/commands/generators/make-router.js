@@ -16,7 +16,11 @@ program
     name = name.toLowerCase();
 
     const routerClass = `${name.charAt(0).toUpperCase()}${name.slice(1)}`;
-    const targetDir = path.join(__dirname, "../../../presentation", "routers");
+    const targetDir = path.join(
+      __dirname,
+      "../../../src/presentation",
+      "routers"
+    );
     const targetFile = path.join(targetDir, `${name}-router.ts`);
     const stubFile = path.join(__dirname, "../../stubs", "router.ts.stub");
 

@@ -42,6 +42,7 @@ export function {RouterClass}Router({RouterName}UseCase: {RouterClass}UseCase) {
    */
   router
     .route(`/${BASE_URL}/:id`)
+    .get(controller.getOne)
     .put(validateRequestMiddleware(createUpdateSchema), asyncHandler(controller.update))
     .delete(asyncHandler(controller.delete));
 

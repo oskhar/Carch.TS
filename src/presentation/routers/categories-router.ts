@@ -42,6 +42,7 @@ export function CategoriesRouter(categoriesUseCase: CategoriesUseCase) {
    */
   router
     .route(`/${baseUrl}/:id`)
+    .get(controller.getOne)
     .put(validateRequestMiddleware(createUpdateSchema), controller.update)
     .delete(controller.delete);
 
