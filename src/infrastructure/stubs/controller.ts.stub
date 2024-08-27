@@ -11,7 +11,7 @@ import Joi from "joi";
 import { RouterNotImplemented } from "../../errors/exceptions/router-nor-implemented";
 
 export class {ControllerClass}Controller {
-  constructor(private {ControllerName}UseCase: {ControllerClass}UseCase) {}
+  constructor(private readonly {ControllerName}UseCase: {ControllerClass}UseCase) {}
 
   public getAll = async (req: Request, res: Response) => {
     throw new RouterNotImplemented("{ControllerName} getAll not implemented.");

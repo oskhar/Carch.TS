@@ -1,4 +1,4 @@
-import { ApiSimpleFilter } from "../../data/type/api-simple-filter";
+import { ApiSimpleFilter } from "../../presentation/type/api-simple-filter";
 import { ConflictUniqueData } from "../../errors/exceptions/conflict-unique-data";
 import { DataNotFound } from "../../errors/exceptions/data-not-found";
 import { CategoriesRepository } from "../interfaces/repositories/categories-repository";
@@ -9,7 +9,7 @@ import {
 } from "../models/categories";
 
 export class CategoriesUseCaseImpl implements CategoriesUseCase {
-  constructor(protected categoriesRepository: CategoriesRepository) {}
+  constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
   async getCategories(
     filter: ApiSimpleFilter

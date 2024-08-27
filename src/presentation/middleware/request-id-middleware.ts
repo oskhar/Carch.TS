@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { generateUUIDv4 } from "../../utils/generate-uuid-v4";
+import { generateUUIDv4 } from "../../infrastructure/utils/generate-uuid-v4";
 
 export function requestIdMiddleware(
   req: Request,

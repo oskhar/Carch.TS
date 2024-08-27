@@ -2,8 +2,8 @@ import {
   LinkPagination,
   Pagination,
   PaginationParams,
-} from "../data/type/api-pagination";
-import { DataNotFound } from "../errors/exceptions/data-not-found";
+} from "../../presentation/type/api-pagination";
+import { DataNotFound } from "../../errors/exceptions/data-not-found";
 
 export function buildPagination(params: PaginationParams): Pagination {
   if (params.currentPage > params.totalPages && params.totalPages > 0)

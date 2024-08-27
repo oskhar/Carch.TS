@@ -2,7 +2,7 @@ import express from "express";
 import { validateRequestMiddleware } from "../middleware/validate-request-middleware";
 import Joi from "joi";
 import { CategoriesUseCase } from "../../domain/interfaces/use-case/categories-use-case";
-import { asyncHandler } from "../../utils/async-hendler";
+import { asyncHandler } from "../../infrastructure/utils/async-hendler";
 import { CategoriesController } from "../controllers/categories-controller";
 
 export function CategoriesRouter(categoriesUseCase: CategoriesUseCase) {

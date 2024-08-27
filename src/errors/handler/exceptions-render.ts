@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ApiStatusEnum } from "../../data/enums/api-status-enum";
+import { ApiStatusEnum } from "../../presentation/enums/api-status-enum";
 import logger from "../logs/logger";
 
 export function exceptionsRender(

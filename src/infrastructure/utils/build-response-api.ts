@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import {
   ApiStatusEnum,
   ApiStatusMessages,
-} from "../data/enums/api-status-enum";
-import { ApiResponse } from "../data/type/api-response";
-import { ApiMeta } from "../data/type/api-meta";
-import { ApiResponseError } from "../data/type/api-response-error";
+} from "../../presentation/enums/api-status-enum";
+import { ApiResponse } from "../../presentation/type/api-response";
+import { ApiMeta } from "../../presentation/type/api-meta";
+import { ApiResponseError } from "../../presentation/type/api-response-error";
 import { generateUUIDv4 } from "./generate-uuid-v4";
 
 export class BuildResponseApi {

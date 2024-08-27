@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 import { CategoriesResponseModel } from "../../domain/models/categories";
-import { buildPagination } from "../../utils/build-pagination";
-import { Pagination } from "../../data/type/api-pagination";
-import { ApiSimpleFilter } from "../../data/type/api-simple-filter";
-import { ApiSimpleSortEnum } from "../../data/enums/api-simple-sort-enum";
+import { buildPagination } from "../../infrastructure/utils/build-pagination";
+import { Pagination } from "../type/api-pagination";
+import { ApiSimpleFilter } from "../type/api-simple-filter";
+import { ApiSimpleSortEnum } from "../enums/api-simple-sort-enum";
 import { CategoriesUseCase } from "../../domain/interfaces/use-case/categories-use-case";
-import { ApiStatusEnum } from "../../data/enums/api-status-enum";
+import { ApiStatusEnum } from "../enums/api-status-enum";
 import { RouterNotImplemented } from "../../errors/exceptions/router-nor-implemented";
 import { wrapAsyncHandler } from "../../errors/handler/wrap-async-handler";
 
 export class CategoriesController {
-  constructor(private categoriesUseCase: CategoriesUseCase) {
+  constructor(private readonly categoriesUseCase: CategoriesUseCase) {
     return wrapAsyncHandler(this);
   }
 

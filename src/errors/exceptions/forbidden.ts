@@ -1,4 +1,4 @@
-import { ApiStatusEnum } from "../../data/enums/api-status-enum";
+import { ApiStatusEnum } from "../../presentation/enums/api-status-enum";
 
 export class Forbidden extends Error {
   readonly statusCode = ApiStatusEnum.FORBIDDEN;

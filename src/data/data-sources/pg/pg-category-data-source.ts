@@ -3,9 +3,12 @@ import {
   CategoriesResponseModel,
 } from "../../../domain/models/categories";
 import { Forbidden } from "../../../errors/exceptions/forbidden";
-import { isNumeric } from "../../../utils/string-checker";
-import { getSortOption, SortOption } from "../../enums/api-simple-sort-enum";
-import { ApiSimpleFilter } from "../../type/api-simple-filter";
+import { isNumeric } from "../../../infrastructure/utils/string-checker";
+import {
+  getSortOption,
+  SortOption,
+} from "../../../presentation/enums/api-simple-sort-enum";
+import { ApiSimpleFilter } from "../../../presentation/type/api-simple-filter";
 import { CategoriesDataSource } from "../../interfaces/data-sources/categories-data-sources";
 import { SQLDatabaseWrapper } from "../../interfaces/database/sql-database-wrapper";
 

@@ -7,7 +7,7 @@ import { exceptionsRender } from "./errors/handler/exceptions-render";
 import { checkRouterImplementedMiddleware } from "./presentation/middleware/check-router-implemented-middleware";
 import logger from "./errors/logs/logger";
 import bundledRouter from "./presentation/routers/all-router-bundle-v1";
-import { asyncHandler } from "./utils/async-hendler";
+import { asyncHandler } from "./infrastructure/utils/async-hendler";
 
 export async function startServer(db: SQLDatabaseWrapper) {
   /**

@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { asyncHandler } from "../../utils/async-hendler";
+import { asyncHandler } from "../../infrastructure/utils/async-hendler";
 
 export function wrapAsyncHandler<T extends object>(controller: T): T {
   return new Proxy(controller, {

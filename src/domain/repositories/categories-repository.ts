@@ -1,4 +1,4 @@
-import { ApiSimpleFilter } from "../../data/type/api-simple-filter";
+import { ApiSimpleFilter } from "../../presentation/type/api-simple-filter";
 import { CategoriesDataSource } from "../../data/interfaces/data-sources/categories-data-sources";
 import { wrapRepositoryException } from "../../errors/handler/wrap-repository-exception";
 import { CategoriesRepository } from "../interfaces/repositories/categories-repository";
@@ -8,7 +8,7 @@ import {
 } from "../models/categories";
 
 export class CategoriesRepositoryImpl implements CategoriesRepository {
-  constructor(protected categoriesDataSource: CategoriesDataSource) {
+  constructor(private readonly categoriesDataSource: CategoriesDataSource) {
     return wrapRepositoryException(this);
   }
 
