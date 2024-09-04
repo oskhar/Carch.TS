@@ -1,0 +1,88 @@
+import { Request, Response } from "express";
+import { Pagination } from "../api/type/api-pagination";
+import { ApiSimpleFilter } from "../api/type/api-simple-filter";
+import { ApiSimpleSortEnum } from "../api/enums/api-simple-sort-enum";
+import { ApiStatusEnum } from "../api/enums/api-status-enum";
+import z from "zod";
+import { validateController } from "../middleware/validate-controller-middleware";
+import { {ControllerClass}UseCase } from "@/domain/interfaces/use-case/{ControllerName}-use-case";
+import { wrapAsyncHandler } from "@/errors/handler/wrap-async-handler";
+import { buildPagination } from "@/infrastructure/utils/build-pagination";
+import { {ControllerClass}ResponseModel } from "@/domain/models/{ControllerName}";
+
+export class {ControllerClass}Controller {
+  constructor(
+    private readonly {ControllerName}UseCase: {ControllerClass}UseCase,
+
+    /**
+     * Validation schemas
+     */
+    private readonly queryValidationGetAll = z.object({
+      page: z.coerce.number().int().min(1).default(1),
+      per_page: z.coerce.number().int().min(1).default(10),
+      search: z.string().optional().or(z.literal("")),
+      sort: z.enum(["latest", "oldest", "a-z", "z-a"]).default("latest"),
+    }),
+    private readonly bodyValidationCreate = z.object({
+      name: z.string(),
+    }),
+    private readonly bodyValidationUpdate = z.object({
+      name: z.string(),
+    })
+  ) {
+    return validateController(wrapAsyncHandler(this));
+  }
+
+  public getAll = async (req: Request, res: Response) => {
+    const filter: ApiSimpleFilter = {
+      page: parseInt(req.query.page as string),
+      perPage: parseInt(req.query.per_page as string),
+      search: req.query.search as string,
+      sort: req.query.sort as ApiSimpleSortEnum,
+    };
+    const {ControllerName} = await this.{ControllerName}UseCase.get{ControllerClass}(filter);
+
+    const pagination = buildPagination({
+      currentPage: filter.page,
+      perPage: filter.perPage,
+      totalItems: {ControllerName}.total,
+      totalPages: Math.ceil({ControllerName}.total / filter.perPage),
+      currentSearch: filter.search,
+    });
+
+    res.build<{
+      {ControllerName}: {ControllerClass}ResponseModel[];
+      pagination: Pagination;
+    }>({
+      {ControllerName}: {ControllerName}.items,
+      pagination: pagination,
+    });
+  };
+
+  public getOne = async (req: Request, res: Response) => {
+    const result: {ControllerClass}ResponseModel = await this.{ControllerName}UseCase.getOne(
+      req.params.id
+    );
+
+    return res.build<{ {ControllerName}: {ControllerClass}ResponseModel }>({
+      {ControllerName}: result,
+    });
+  };
+
+  public create = async (req: Request, res: Response) => {
+    await this.{ControllerName}UseCase.createOne({ name: req.body.name });
+    return res.build(ApiStatusEnum.CREATED);
+  };
+
+  public update = async (req: Request, res: Response) => {
+    await this.{ControllerName}UseCase.updateOne(req.params.id, {
+      name: req.body.name,
+    });
+    return res.build();
+  };
+
+  public delete = async (req: Request, res: Response) => {
+    await this.{ControllerName}UseCase.deleteOne(req.params.id);
+    return res.build(ApiStatusEnum.NO_CONTENT);
+  };
+}

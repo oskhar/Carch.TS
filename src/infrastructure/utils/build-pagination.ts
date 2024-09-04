@@ -2,12 +2,12 @@ import {
   LinkPagination,
   Pagination,
   PaginationParams,
-} from "../../presentation/type/api-pagination";
-import { DataNotFound } from "../../errors/exceptions/data-not-found";
+} from "../../presentation/api/type/api-pagination";
+import { NotFound } from "../../errors/exceptions/not-found";
 
 export function buildPagination(params: PaginationParams): Pagination {
   if (params.currentPage > params.totalPages && params.totalPages > 0)
-    throw new DataNotFound(
+    throw new NotFound(
       "You have exceeded the maximum page limit. Please check the available pages and try again."
     );
 

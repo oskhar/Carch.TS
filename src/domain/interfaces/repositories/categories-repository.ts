@@ -1,8 +1,8 @@
-import { ApiSimpleFilter } from "../../../presentation/type/api-simple-filter";
 import {
   CategoriesRequestModel,
   CategoriesResponseModel,
-} from "../../models/categories";
+} from "@/domain/models/categories";
+import { ApiSimpleFilter } from "@/presentation/api/type/api-simple-filter";
 
 export interface CategoriesRepository {
   getCategories(

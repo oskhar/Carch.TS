@@ -1,0 +1,147 @@
+import {
+  {DataSourceClass}RequestModel,
+  {DataSourceClass}ResponseModel,
+} from "../../../domain/models/{DataSourceName}";
+import { Forbidden } from "../../../errors/exceptions/forbidden";
+import {
+  getSortOption,
+  SortOption,
+} from "../../../presentation/api/enums/api-simple-sort-enum";
+import { ApiSimpleFilter } from "../../../presentation/api/type/api-simple-filter";
+import { {DataSourceClass}DataSource } from "../../interfaces/data-sources/{DataSourceName}-data-sources";
+import { Sequelize, Model, DataTypes, Op, ModelStatic } from "sequelize";
+
+export class Sequelize{DataSourceClass}DataSource implements {DataSourceClass}DataSource {
+  private readonly exposed_columns = ["name"];
+  private readonly model: ModelStatic<
+    Model<{DataSourceClass}ResponseModel, {DataSourceClass}RequestModel>
+  >;
+
+  constructor(private readonly sequelize: Sequelize) {
+    this.model = this.init{DataSourceClass}Model(sequelize);
+  }
+
+  private init{DataSourceClass}Model(
+    sequelize: Sequelize
+  ): ModelStatic<Model<{DataSourceClass}ResponseModel, {DataSourceClass}RequestModel>> {
+    return sequelize.define<
+      Model<{DataSourceClass}ResponseModel, {DataSourceClass}RequestModel>
+    >(
+      "{DataSourceName}",
+      {
+        id: {
+          type: DataTypes.NUMBER,
+          primaryKey: true,
+          autoIncrement: true,
+          allowNull: false,
+        },
+        name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          defaultValue: DataTypes.NOW,
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          defaultValue: DataTypes.NOW,
+        },
+      },
+      {
+        tableName: "{DataSourceName}",
+        timestamps: false,
+      }
+    );
+  }
+
+  async getAll(
+    filter: ApiSimpleFilter
+  ): Promise<{ items: {DataSourceClass}ResponseModel[]; total: number }> {
+    const whereClause: any = {};
+    const sortOption: SortOption = getSortOption(filter.sort) || {
+      column: "created_at",
+      direction: "DESC",
+    };
+
+    if (filter.search) {
+      whereClause[Op.or] = this.exposed_columns.map((column) => ({
+        [column]: { [Op.iLike]: `%${filter.search}%` },
+      }));
+    }
+
+    const { rows: items, count: total } = await this.model.findAndCountAll({
+      where: whereClause,
+      order: [[sortOption.column, sortOption.direction]],
+      limit: filter.perPage || 10,
+      offset: ((filter.page || 1) - 1) * (filter.perPage || 10),
+    });
+
+    const mappedItems: {DataSourceClass}ResponseModel[] = items.map((item) => {
+      const { id, name, created_at, updated_at } =
+        item.get() as {DataSourceClass}ResponseModel;
+      return {
+        id,
+        name,
+        created_at,
+        updated_at,
+      };
+    });
+
+    return { items: mappedItems, total };
+  }
+
+  async create({DataSourceName}: {DataSourceClass}RequestModel): Promise<void> {
+    await this.model.create({DataSourceName});
+  }
+
+  async updateOne(
+    id: string,
+    {DataSourceName}: {DataSourceClass}RequestModel
+  ): Promise<void> {
+    const [updatedCount] = await this.model.update(
+      {
+        ...{DataSourceName},
+        updated_at: new Date().toISOString(),
+      },
+      { where: { id } }
+    );
+
+    if (updatedCount === 0) {
+      throw new Error(`Update failed: No record found with id=${id}`);
+    }
+  }
+
+  async getOne(
+    payload: string | Record<string, string>
+  ): Promise<{DataSourceClass}ResponseModel | null> {
+    const whereClause: any =
+      typeof payload === "string" ? { id: payload } : payload;
+
+    if (typeof payload === "object") {
+      for (const key in payload) {
+        if (!this.exposed_columns.includes(key)) {
+          throw new Forbidden("Invalid column or bypass attempt.");
+        }
+      }
+    }
+
+    const item = await this.model.findOne({ where: whereClause });
+
+    if (!item) return null;
+
+    const { id, name, created_at, updated_at } =
+      item.get() as {DataSourceClass}ResponseModel;
+
+    return {
+      id,
+      name,
+      created_at,
+      updated_at,
+    } as {DataSourceClass}ResponseModel;
+  }
+
+  async deleteOne(id: string): Promise<void> {
+    await this.model.destroy({ where: { id } });
+  }
+}

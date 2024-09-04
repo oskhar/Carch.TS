@@ -1,15 +1,15 @@
 import express, { NextFunction } from "express";
 import { inspect } from "util";
-import { SQLDatabaseWrapper } from "./infrastructure/interfaces/database/sql-database-wrapper";
 import { buildResponseMiddleware } from "./presentation/middleware/build-response-middleware";
 import { requestIdMiddleware } from "./presentation/middleware/request-id-middleware";
 import { exceptionsRender } from "./errors/handler/exceptions-render";
 import { checkRouterImplementedMiddleware } from "./presentation/middleware/check-router-implemented-middleware";
 import logger from "./errors/logs/logger";
-import bundledRouter from "./presentation/routers/all-router-bundle-v1";
+import bundledRouter from "./presentation/routers/v1/all-router-bundle-v1";
 import { asyncHandler } from "./infrastructure/utils/async-hendler";
+import { Sequelize } from "sequelize";
 
-export async function startServer(db: SQLDatabaseWrapper) {
+export async function startServer(db: Sequelize) {
   /**
    * Server configure
    *

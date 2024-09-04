@@ -1,10 +1,11 @@
 import jwt from "jsonwebtoken";
-import { buildFutureDate } from "../utils/build-future-date";
 import { JwtToken } from "../interfaces/security/jwt-token";
 import {
+  AccessToken,
   AuthenticationPayload,
-  AuthenticationResponseModel,
-} from "../../domain/models/authentication";
+  RefreshToken,
+} from "@/domain/models/authentication";
+import { buildFutureDate } from "../utils/build-future-date";
 
 export class JwtTokenAdapter implements JwtToken {
   constructor(
@@ -14,7 +15,7 @@ export class JwtTokenAdapter implements JwtToken {
     private readonly refreshTokenExpirationInSeconds = 691200
   ) {}
 
-  signAccessToken(data: AuthenticationPayload): AuthenticationResponseModel {
+  signAccessToken(data: AuthenticationPayload): AccessToken {
     const expiresAt = buildFutureDate(
       new Date(),
       this.accessTokenExpirationInSeconds
@@ -24,12 +25,12 @@ export class JwtTokenAdapter implements JwtToken {
     });
 
     return {
-      access_token: accessToken,
+      token: accessToken,
       expires_at: expiresAt,
     };
   }
 
-  signRefreshToken(data: AuthenticationPayload): AuthenticationResponseModel {
+  signRefreshToken(data: AuthenticationPayload): RefreshToken {
     const expiresAt = buildFutureDate(
       new Date(),
       this.refreshTokenExpirationInSeconds
@@ -39,7 +40,7 @@ export class JwtTokenAdapter implements JwtToken {
     });
 
     return {
-      access_token: accessToken,
+      token: accessToken,
       expires_at: expiresAt,
     };
   }

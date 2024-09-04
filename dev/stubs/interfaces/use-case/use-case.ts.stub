@@ -1,0 +1,15 @@
+import {
+  {UseCaseClass}RequestModel,
+  {UseCaseClass}ResponseModel,
+} from "@/domain/models/{UseCaseName}";
+import { ApiSimpleFilter } from "@/presentation/api/type/api-simple-filter";
+
+export interface {UseCaseClass}UseCase {
+  {getUseCaseClass}(
+    filter: ApiSimpleFilter
+  ): Promise<{ items: {UseCaseClass}ResponseModel[]; total: number }>;
+  createOne({UseCaseName}: {UseCaseClass}RequestModel): void;
+  deleteOne(id: string): void;
+  getOne(id: string): Promise<{UseCaseClass}ResponseModel>;
+  updateOne(id: string, {UseCaseName}: {UseCaseClass}RequestModel): void;
+}

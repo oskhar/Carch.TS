@@ -1,17 +1,36 @@
 import { Request, Response } from "express";
-import { CategoriesResponseModel } from "../../domain/models/categories";
-import { buildPagination } from "../../infrastructure/utils/build-pagination";
-import { Pagination } from "../type/api-pagination";
-import { ApiSimpleFilter } from "../type/api-simple-filter";
-import { ApiSimpleSortEnum } from "../enums/api-simple-sort-enum";
-import { CategoriesUseCase } from "../../domain/interfaces/use-case/categories-use-case";
-import { ApiStatusEnum } from "../enums/api-status-enum";
-import { RouterNotImplemented } from "../../errors/exceptions/router-nor-implemented";
-import { wrapAsyncHandler } from "../../errors/handler/wrap-async-handler";
+import { Pagination } from "../api/type/api-pagination";
+import { ApiSimpleFilter } from "../api/type/api-simple-filter";
+import { ApiSimpleSortEnum } from "../api/enums/api-simple-sort-enum";
+import { ApiStatusEnum } from "../api/enums/api-status-enum";
+import z from "zod";
+import { validateController } from "../middleware/validate-controller-middleware";
+import { CategoriesUseCase } from "@/domain/interfaces/use-case/categories-use-case";
+import { wrapAsyncHandler } from "@/errors/handler/wrap-async-handler";
+import { buildPagination } from "@/infrastructure/utils/build-pagination";
+import { CategoriesResponseModel } from "@/domain/models/categories";
 
 export class CategoriesController {
-  constructor(private readonly categoriesUseCase: CategoriesUseCase) {
-    return wrapAsyncHandler(this);
+  constructor(
+    private readonly categoriesUseCase: CategoriesUseCase,
+
+    /**
+     * Validation schemas
+     */
+    private readonly queryValidationGetAll = z.object({
+      page: z.coerce.number().int().min(1).default(1),
+      per_page: z.coerce.number().int().min(1).default(10),
+      search: z.string().optional().or(z.literal("")),
+      sort: z.enum(["latest", "oldest", "a-z", "z-a"]).default("latest"),
+    }),
+    private readonly bodyValidationCreate = z.object({
+      name: z.string(),
+    }),
+    private readonly bodyValidationUpdate = z.object({
+      name: z.string(),
+    })
+  ) {
+    return validateController(wrapAsyncHandler(this));
   }
 
   public getAll = async (req: Request, res: Response) => {
@@ -56,7 +75,10 @@ export class CategoriesController {
   };
 
   public update = async (req: Request, res: Response) => {
-    throw new RouterNotImplemented("categories update not implemented.");
+    await this.categoriesUseCase.updateOne(req.params.id, {
+      name: req.body.name,
+    });
+    return res.build();
   };
 
   public delete = async (req: Request, res: Response) => {

@@ -1,4 +1,4 @@
-import { DatabaseQueryFailed } from "../exceptions/database-query-failed";
+import { InternalServerError } from "../exceptions/database-query-failed";
 
 export function wrapRepositoryException<T extends object>(repository: T): T {
   return new Proxy(repository, {
@@ -14,7 +14,7 @@ export function wrapRepositoryException<T extends object>(repository: T): T {
           } catch (error: any) {
             /***/
             if (error.name === "error")
-              throw new DatabaseQueryFailed(
+              throw new InternalServerError(
                 `In method ${prop as string} within class ${
                   repository.constructor.name
                 }\n${error.message}`

@@ -1,9 +1,12 @@
-import { ApiStatusEnum } from "../../presentation/enums/api-status-enum";
+import { ApiStatusEnum } from "../../presentation/api/enums/api-status-enum";
 
 export class Forbidden extends Error {
-  readonly statusCode = ApiStatusEnum.FORBIDDEN;
-  readonly description = "Attempted unauthorized access detected.";
-  constructor(message: string) {
+  public readonly statusCode = ApiStatusEnum.FORBIDDEN;
+  constructor(
+    public readonly message: string,
+    public readonly description?: string,
+    public readonly multiErrors?: string[]
+  ) {
     super(message);
     this.name = "Forbidden";
   }

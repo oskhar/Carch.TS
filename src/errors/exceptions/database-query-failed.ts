@@ -1,10 +1,13 @@
-import { ApiStatusEnum } from "../../presentation/enums/api-status-enum";
+import { ApiStatusEnum } from "../../presentation/api/enums/api-status-enum";
 
-export class DatabaseQueryFailed extends Error {
-  readonly statusCode = ApiStatusEnum.INTERNAL_SERVER_ERROR;
-  readonly description = "Database query failed.";
-  constructor(message: string) {
+export class InternalServerError extends Error {
+  public readonly statusCode = ApiStatusEnum.INTERNAL_SERVER_ERROR;
+  constructor(
+    public readonly message: string,
+    public readonly description?: string,
+    public readonly multiErrors?: string[]
+  ) {
     super(message);
-    this.name = "DatabaseQueryFailed";
+    this.name = "InternalServerError";
   }
 }

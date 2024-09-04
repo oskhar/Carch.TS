@@ -1,9 +1,12 @@
-import { ApiStatusEnum } from "../../presentation/enums/api-status-enum";
+import { ApiStatusEnum } from "../../presentation/api/enums/api-status-enum";
 
 export class Unauthenticated extends Error {
-  readonly statusCode = ApiStatusEnum.UNAUTHORIZED;
-  readonly description = "Unauthenticated.";
-  constructor(message: string) {
+  public readonly statusCode = ApiStatusEnum.UNAUTHORIZED;
+  constructor(
+    public readonly message: string,
+    public readonly description?: string,
+    public readonly multiErrors?: string[]
+  ) {
     super(message);
     this.name = "Unauthenticated";
   }

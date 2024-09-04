@@ -1,5 +1,5 @@
+import { NotFound } from "@/errors/exceptions/not-found";
 import { Request, Response, NextFunction } from "express";
-import { RouterNotImplemented } from "../../errors/exceptions/router-nor-implemented";
 
 export function checkRouterImplementedMiddleware(
   req: Request,
@@ -10,7 +10,7 @@ export function checkRouterImplementedMiddleware(
 
   if (!routeImplemented) {
     return next(
-      new RouterNotImplemented(
+      new NotFound(
         `Router not implemented for ${req.method} ${req.originalUrl}`
       )
     );

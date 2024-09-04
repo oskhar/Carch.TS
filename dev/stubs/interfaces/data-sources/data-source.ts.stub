@@ -1,0 +1,17 @@
+import {
+  {DataSourceClass}RequestModel,
+  {DataSourceClass}ResponseModel,
+} from "../../../domain/models/{DataSourceName}";
+import { ApiSimpleFilter } from "../../../presentation/api/type/api-simple-filter";
+
+export interface {DataSourceClass}DataSource {
+  getAll(
+    filter: ApiSimpleFilter
+  ): Promise<{ items: {DataSourceClass}ResponseModel[]; total: number }>;
+  create({DataSourceName}: {DataSourceClass}RequestModel): Promise<void>;
+  updateOne(id: string, {DataSourceName}: {DataSourceClass}RequestModel): Promise<void>;
+  getOne(
+    payload: string | Record<string, string>
+  ): Promise<{DataSourceClass}ResponseModel | null>;
+  deleteOne(id: string): Promise<void>;
+}

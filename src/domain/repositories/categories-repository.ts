@@ -1,11 +1,11 @@
-import { ApiSimpleFilter } from "../../presentation/type/api-simple-filter";
-import { CategoriesDataSource } from "../../infrastructure/interfaces/data-sources/categories-data-sources";
-import { wrapRepositoryException } from "../../errors/handler/wrap-repository-exception";
+import { CategoriesDataSource } from "@/infrastructure/interfaces/data-sources/categories-data-sources";
 import { CategoriesRepository } from "../interfaces/repositories/categories-repository";
 import {
   CategoriesRequestModel,
   CategoriesResponseModel,
 } from "../models/categories";
+import { wrapRepositoryException } from "@/errors/handler/wrap-repository-exception";
+import { ApiSimpleFilter } from "@/presentation/api/type/api-simple-filter";
 
 export class CategoriesRepositoryImpl implements CategoriesRepository {
   constructor(private readonly categoriesDataSource: CategoriesDataSource) {

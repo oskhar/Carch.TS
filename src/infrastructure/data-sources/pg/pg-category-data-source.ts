@@ -7,14 +7,14 @@ import { isNumeric } from "../../utils/string-checker";
 import {
   getSortOption,
   SortOption,
-} from "../../../presentation/enums/api-simple-sort-enum";
-import { ApiSimpleFilter } from "../../../presentation/type/api-simple-filter";
+} from "../../../presentation/api/enums/api-simple-sort-enum";
+import { ApiSimpleFilter } from "../../../presentation/api/type/api-simple-filter";
 import { CategoriesDataSource } from "../../interfaces/data-sources/categories-data-sources";
 import { SQLDatabaseWrapper } from "../../interfaces/database/sql-database-wrapper";
 
 export class PGCategoriesDataSource implements CategoriesDataSource {
-  private readonly db_table = "categories";
-  private readonly exposed_columns = ["name"];
+  private readonly db_table: string = "categories";
+  private readonly exposed_columns: string[] = ["name"];
 
   constructor(private readonly db: SQLDatabaseWrapper) {}
 
@@ -28,8 +28,12 @@ export class PGCategoriesDataSource implements CategoriesDataSource {
     const sortOption: SortOption = getSortOption(filter.sort);
 
     if (filter.search) {
-      conditions.push("name ILIKE $1");
-      values.push(`%${filter.search}%`);
+      const searchConditions = this.exposed_columns.map((column, index) => {
+        values.push(`%${filter.search}%`);
+        return `${column} ILIKE $${index + 1}`;
+      });
+
+      conditions.push(`(${searchConditions.join(" OR ")})`);
     }
 
     if (conditions.length > 0) {

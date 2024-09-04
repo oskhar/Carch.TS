@@ -2,7 +2,7 @@ import {
   CategoriesRequestModel,
   CategoriesResponseModel,
 } from "../../../domain/models/categories";
-import { ApiSimpleFilter } from "../../../presentation/type/api-simple-filter";
+import { ApiSimpleFilter } from "../../../presentation/api/type/api-simple-filter";
 
 export interface CategoriesDataSource {
   getAll(
